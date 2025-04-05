@@ -6,15 +6,13 @@
 >
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- The base package name (Where Main.java is) -->
-    <groupId>com.rpg</groupId>
-
-    <!-- The name of the project directory -->
+    <!--
+    groupId: The base package name (Where Main.java is)
+    artifactId: The name of the project directory
+    -->
+    <groupId>com.jrpg</groupId>
     <artifactId>rpg-engine</artifactId>
-
     <version>1.0-SNAPSHOT</version>
-
-
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -22,4 +20,28 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <build>
+        <plugins>
+            <!-- Plugin to allow mvn exec:java -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.jrpg.Main</mainClass>
+                    <executable>maven</executable>
+                    <environmentVariables>
+                        <LANG>en_US</LANG>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
