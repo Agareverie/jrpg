@@ -11,7 +11,7 @@
     artifactId: The name of the project directory
     -->
     <groupId>com.jrpg</groupId>
-    <artifactId>rpg-engine</artifactId>
+    <artifactId>jrpg</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
