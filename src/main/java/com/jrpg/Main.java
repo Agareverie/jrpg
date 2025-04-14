@@ -1,11 +1,16 @@
 package com.jrpg;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.jrpg.engine.*;
 import com.jrpg.renderer.Renderer;
 import com.jrpg.renderer.graphics.Rectangle;
+import com.jrpg.renderer.graphics.Sprite;
 
 public class Main {
     public static void main(String[] args) {
@@ -26,6 +31,19 @@ public class Main {
         Coordinate position = new Coordinate(100, 300);
         Coordinate velocitiy = new Coordinate(16, -9);
 
+        Image sprite;
+
+        try{
+            //im not sure how to use the resources folder
+            //but this is just for testing
+            //in the actual version we should make a class that handles loading the images
+            sprite = ImageIO.read(new File("./src/main/resources/default.png"));
+        } catch(IOException e){
+            System.err.println(e.getMessage());
+            System.exit(0);
+            return;
+        }
+
         while (true){
             renderer.clear();
 
@@ -38,11 +56,11 @@ public class Main {
             }
 
             
-            if(position.getY() + 100> 675 || position.getY() < 0){
+            if(position.getY() + 100 > 675 || position.getY() < 0){
                 velocitiy.setY(velocitiy.getY() * -1);
             }
 
-            renderer.add(new Rectangle(position, new Coordinate(100, 100), Color.black));
+            renderer.add(new Sprite(position, new Coordinate(100, 100), sprite));
 
             renderer.render();
 
