@@ -37,7 +37,7 @@ public class Main {
             //im not sure how to use the resources folder
             //but this is just for testing
             //in the actual version we should make a class that handles loading the images
-            sprite = ImageIO.read(new File("./src/main/resources/default.png"));
+            sprite = ImageIO.read(Main.class.getResource("/default.png"));
         } catch(IOException e){
             System.err.println(e.getMessage());
             System.exit(0);
