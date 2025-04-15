@@ -86,12 +86,13 @@ public class GameInputHandler {
                 handleDirectionalInput("down");
                 break;
             case KeyEvent.VK_Z:
-                if(inMenu) getCurrentGameObject().getGameActions().get(selectionIndexes[1]).getOnRun().accept(engine);
+                if (inMenu)
+                    getCurrentGameObject().getGameActions().get(selectionIndexes[1]).getOnRun().accept(engine);
                 inMenu = !inMenu;
                 break;
             case KeyEvent.VK_X:
                 inMenu = false;
-            
+
         }
     }
 
@@ -101,11 +102,13 @@ public class GameInputHandler {
             switch (direction) {
                 case "up":
                     this.selectionIndexes[1]--;
-                    if(this.selectionIndexes[1] >= gameActions.size()) this.selectionIndexes[1] = 0;
+                    if (this.selectionIndexes[1] < 0)
+                        this.selectionIndexes[1] = gameActions.size() - 1;
                     break;
                 case "down":
                     this.selectionIndexes[1]++;
-                    if(this.selectionIndexes[1] <= 0) this.selectionIndexes[1] = gameActions.size() - 1;
+                    if (this.selectionIndexes[1] >= gameActions.size())
+                        this.selectionIndexes[1] = 0;
                     break;
             }
         } else
