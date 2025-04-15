@@ -67,5 +67,9 @@ public class Vector2D {
     public Coordinate toCoordinate(){
         return new Coordinate((int) Math.round(x), (int) Math.round(y));
     }
+
+    public String toString(){
+        return x + " " + y;
+    }
 }
 
