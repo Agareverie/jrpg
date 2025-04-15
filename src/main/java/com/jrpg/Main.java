@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import com.jrpg.engine.*;
 import com.jrpg.renderer.Renderer;
+import com.jrpg.renderer.SpriteLoader;
 import com.jrpg.renderer.graphics.Rectangle;
 import com.jrpg.renderer.graphics.Sprite;
 
@@ -31,18 +32,9 @@ public class Main {
         Coordinate position = new Coordinate(100, 300);
         Coordinate velocitiy = new Coordinate(16, -9);
 
-        Image sprite;
-
-        try{
-            //im not sure how to use the resources folder
-            //but this is just for testing
-            //in the actual version we should make a class that handles loading the images
-            sprite = ImageIO.read(Main.class.getResource("/default.png"));
-        } catch(IOException e){
-            System.err.println(e.getMessage());
-            System.exit(0);
-            return;
-        }
+        Image sprite = SpriteLoader.getSprite("testSprite1");
+        //Image sprite = SpriteLoader.getSprite("testSprite2");
+        //Image sprite = SpriteLoader.getSprite("invalidSprite");
 
         while (true){
             renderer.clear();
