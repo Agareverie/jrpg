@@ -20,7 +20,7 @@ public class Camera {
 
         for(GameObject gameObject : currentScene.getGameObjects()){
             //coordinates offseted so that the position appear centered on the center of the sprite instead of the top right
-            Coordinate offsettedCoordinates = gameObject.getPosition().sub(gameObject.getDimensions().scale(1/2, 1/2)).toCoordinate();
+            Coordinate offsettedCoordinates = gameObject.getPosition().sub(gameObject.getDimensions().scale(1/2., 1/2.)).toCoordinate();
             renderer.add(new Sprite(offsettedCoordinates, gameObject.getDimensions().toCoordinate(), SpriteLoader.getSprite(gameObject.getSpriteName())));
         }
     }
