@@ -1,11 +1,14 @@
 package com.jrpg.engine;
 
+import java.util.ArrayList;
+
 public class GameObject {
 
     //fields for rendering
     private Vector2D position;
     private Vector2D dimensions;
     private String spriteName;
+    private ArrayList<GameAction> gameActions;
 
     public Vector2D getPosition() {
         return position;
@@ -31,9 +34,18 @@ public class GameObject {
         this.spriteName = spriteName;
     }
 
+    public ArrayList<GameAction> getGameActions() {
+        return gameActions;
+    }
+
     public GameObject(Vector2D position, Vector2D dimensions, String spriteName){
         this.position = position;
         this.dimensions = dimensions;
         this.spriteName = spriteName;
+        this.gameActions = new ArrayList<GameAction>();
+    }
+
+    public void addGameAction(GameAction gameAction){
+        this.gameActions.add(gameAction);
     }
 }

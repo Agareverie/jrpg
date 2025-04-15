@@ -74,18 +74,42 @@ public class GameInputHandler {
     private void handleInput(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
-                handleObjectSelectionChange("left");
+                handleDirectionalInput("left");
                 break;
             case KeyEvent.VK_RIGHT:
-                handleObjectSelectionChange("right");
+                handleDirectionalInput("right");
                 break;
             case KeyEvent.VK_UP:
-                handleObjectSelectionChange("up");
+                handleDirectionalInput("up");
                 break;
             case KeyEvent.VK_DOWN:
-                handleObjectSelectionChange("down");
+                handleDirectionalInput("down");
                 break;
+            case KeyEvent.VK_Z:
+                if(inMenu) getCurrentGameObject().getGameActions().get(selectionIndexes[1]).getOnRun().accept(engine);
+                inMenu = !inMenu;
+                break;
+            case KeyEvent.VK_X:
+                inMenu = false;
+            
         }
+    }
+
+    private void handleDirectionalInput(String direction) {
+        if (inMenu) {
+            ArrayList<GameAction> gameActions = getCurrentGameObject().getGameActions();
+            switch (direction) {
+                case "up":
+                    this.selectionIndexes[1]--;
+                    if(this.selectionIndexes[1] >= gameActions.size()) this.selectionIndexes[1] = 0;
+                    break;
+                case "down":
+                    this.selectionIndexes[1]++;
+                    if(this.selectionIndexes[1] <= 0) this.selectionIndexes[1] = gameActions.size() - 1;
+                    break;
+            }
+        } else
+            handleObjectSelectionChange(direction);
     }
 
     // TODO maybe not use a string as an input and infer the direction directly from
@@ -96,7 +120,7 @@ public class GameInputHandler {
         GameObject currentGameObject = getCurrentGameObject();
         Vector2D currentPosition = currentGameObject.getPosition();
 
-        //filter out objects in the wrong direction
+        // filter out objects in the wrong direction
         Predicate<Vector2D> filterCondition;
         switch (direction) {
             case "up":
@@ -141,7 +165,7 @@ public class GameInputHandler {
             }
         }
 
-        //do nothing if no target was found
+        // do nothing if no target was found
         if (minIndex == null)
             return;
 

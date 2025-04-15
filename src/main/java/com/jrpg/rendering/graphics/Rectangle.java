@@ -4,9 +4,9 @@ import java.awt.*;
 import com.jrpg.rendering.Coordinate;
 public class Rectangle implements GraphicsObject {
 
-    private Coordinate position;
-    private Coordinate dimensions;
-    private Color color;
+    protected Coordinate position;
+    protected Coordinate dimensions;
+    protected Color color;
 
     public Rectangle(Coordinate position, Coordinate dimensions, Color color){
         this.position = position;
