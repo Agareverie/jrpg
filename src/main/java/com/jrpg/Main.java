@@ -48,10 +48,12 @@ public class Main {
             }
 
             renderer.add(new Sprite(position, new Coordinate(100, 100), sprite));
+            renderer.add(new Text("Test", position.add(0,-20), new Font("arial", Font.PLAIN, 20)));
+            renderer.add(new Text("Test", position.add(0,-60), new Font("Serif", Font.BOLD, 40)));
             renderer.render();
 
             //poor man's time.sleep()
-            for(int j = 0; j < 1000; j++) {System.out.println(j);};
+            for(int j = 0; j < 200000000; j++) {};
         }
     }
 }
