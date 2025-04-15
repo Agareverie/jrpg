@@ -2,7 +2,7 @@ package com.jrpg.renderer.graphics;
 
 import java.awt.*;
 
-import com.jrpg.engine.Coordinate;
+import com.jrpg.renderer.Coordinate;
 
 public class Sprite implements GraphicsObject{
     private Coordinate position;

@@ -4,6 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import com.jrpg.engine.*;
+import com.jrpg.renderer.Coordinate;
 import com.jrpg.renderer.Renderer;
 import com.jrpg.renderer.SpriteLoader;
 import com.jrpg.renderer.graphics.Sprite;

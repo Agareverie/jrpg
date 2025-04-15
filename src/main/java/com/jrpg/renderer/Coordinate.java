@@ -1,4 +1,4 @@
-package com.jrpg.engine;
+package com.jrpg.renderer;
 
 public class Coordinate {
     private int x;
