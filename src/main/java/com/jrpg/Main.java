@@ -1,16 +1,11 @@
 package com.jrpg;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.jrpg.engine.*;
 import com.jrpg.renderer.Renderer;
 import com.jrpg.renderer.SpriteLoader;
-import com.jrpg.renderer.graphics.Rectangle;
 import com.jrpg.renderer.graphics.Sprite;
 
 public class Main {
