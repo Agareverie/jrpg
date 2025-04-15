@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        GraphicsRenderer renderer = new GraphicsRenderer(frame);
+        GraphicsRenderer renderer = new GraphicsRenderer(frame, Dimensions.DEFAULT);
 
         Coordinate position = new Coordinate(0, 0);
         Coordinate velocity = new Coordinate(16, 9);

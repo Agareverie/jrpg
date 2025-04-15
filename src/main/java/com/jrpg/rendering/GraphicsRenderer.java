@@ -1,6 +1,5 @@
 package com.jrpg.rendering;
 
-import com.jrpg.dimensions.Dimensions;
 import com.jrpg.rendering.graphics.Drawable;
 
 import javax.swing.*;
@@ -10,9 +9,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GraphicsRenderer {
     private final JFrame frame;
     private final CopyOnWriteArrayList<Drawable> drawables = new CopyOnWriteArrayList<>();
-    private static final Dimension dimensions = new Dimension(Dimensions.WIDTH, Dimensions.HEIGHT);
 
-    public GraphicsRenderer(JFrame frame) {
+    public GraphicsRenderer(JFrame frame, Dimension dimensions) {
         this.frame = frame;
         frame.setResizable(false);
 

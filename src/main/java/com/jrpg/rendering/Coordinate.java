@@ -54,4 +54,8 @@ public class Coordinate {
     public Coordinate copy() {
         return new Coordinate(x, y);
     }
+
+    public static Coordinate centered(Coordinate position, Coordinate dimensions) {
+        return new Coordinate(position.getX() - (dimensions.getX() / 2), position.getY() - (dimensions.getY() / 2));
+    }
 }
