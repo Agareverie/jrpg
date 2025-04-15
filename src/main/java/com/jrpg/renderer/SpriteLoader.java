@@ -14,6 +14,10 @@ public class SpriteLoader {
     private static boolean initialized = false;
     private static HashMap<String, Image> sprites;
 
+    //maybe make this mofifiable at runtime?
+    //for now it's constant from startup
+    private static String defaultSpriteName = "default";
+
     private static void initialize(){
         sprites = new HashMap<String, Image>();
 
@@ -44,13 +48,18 @@ public class SpriteLoader {
         });
 
         paths.close();
+        
+        if(!sprites.containsKey(defaultSpriteName)){
+            throw new RuntimeException("no default sprite with name " + defaultSpriteName + " found");
+        }
+
     }
 
     public static Image getSprite(String name){
         if(!SpriteLoader.initialized) SpriteLoader.initialize();
 
         if(sprites.containsKey(name)) return sprites.get(name);
-        else return sprites.get("default");
+        else return sprites.get(defaultSpriteName);
     }
     
 }
