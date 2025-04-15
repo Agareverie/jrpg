@@ -1,65 +1,87 @@
 package com.jrpg.rendering;
 
-import java.awt.*;
+import java.awt.Image;
+import java.io.IOException;
 import java.net.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.stream.Stream;
-
 import javax.imageio.ImageIO;
 
-//TODO: switch this to a singleton
 public class SpriteLoader {
-    
-    private static boolean initialized = false;
-    private static HashMap<String, Image> sprites;
-
-    //maybe make this mofifiable at runtime?
-    //for now it's constant from startup
+    private final Map<String, Image> sprites;
     private static String defaultSpriteName = "default";
 
-    private static void initialize(){
-        sprites = new HashMap<String, Image>();
+    private static final class SingletonHolder {
+        public static final SpriteLoader INSTANCE = new SpriteLoader();
+    }
 
-        URL url = SpriteLoader.class.getResource("/sprites");
-        
-        Stream<Path> paths;
+    public static SpriteLoader getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
+    private static Optional<Path> loadSpritesFolder() {
+        URL spritesUrl = SpriteLoader.class.getResource("/sprites");
+
+        if (spritesUrl == null) {
+            return Optional.empty();
+        }
+
         try {
-            paths = Files.walk(Path.of(url.toURI()));
-        } catch (Exception e) {
+            return Optional.of(Path.of(spritesUrl.toURI()));
+
+        } catch (URISyntaxException e) {
+            return Optional.empty();
+        }
+    }
+
+    private SpriteLoader() {
+        sprites = new HashMap<>();
+
+        try (var folder = Files.walk(loadSpritesFolder().orElseThrow(NullPointerException::new))) {
+            folder.filter(Files::isRegularFile).forEach(path -> {
+                String fileName = path.getFileName().toString();
+
+                String[] spriteNameParts = fileName.split("\\.");
+                StringJoiner spriteNameJoiner = new StringJoiner(".");
+
+                for (int i = 0; i < spriteNameParts.length - 1; i++) {
+                    spriteNameJoiner.add(spriteNameParts[i]);
+                }
+
+                String spriteName = spriteNameJoiner.toString();
+
+                try {
+                    Image sprite = ImageIO.read(path.toFile());
+                    sprites.put(spriteName, sprite);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        paths.filter(Files::isRegularFile).forEach(path -> {
-            String fileName = path.getFileName().toString();
-
-            //don't name our files with more than 1 .
-            //(or modify this piece of code to support that first)
-            String spriteName = fileName.split("\\.")[0];
-
-            Image sprite;
-            try {
-                sprite = ImageIO.read(path.toFile());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            sprites.put(spriteName, sprite);
-        });
-
-        paths.close();
-
-        if(!sprites.containsKey(defaultSpriteName)){
+        if (!sprites.containsKey(defaultSpriteName)) {
             throw new RuntimeException("no default sprite with name " + defaultSpriteName + " found");
         }
-
     }
 
-    public static Image getSprite(String name){
-        if(!SpriteLoader.initialized) SpriteLoader.initialize();
+    public static Image getSprite(String name) {
+        var sprites = getInstance().sprites;
 
-        if(sprites.containsKey(name)) return sprites.get(name);
-        else return sprites.get(defaultSpriteName);
+        if (sprites.containsKey(name)) {
+            return sprites.get(name);
+        }
+
+        return sprites.get(defaultSpriteName);
     }
-    
+
+    public static void setDefaultSpriteName(String defaultSpriteName) {
+        if (!getInstance().sprites.containsKey(defaultSpriteName)) {
+            throw new RuntimeException("no default sprite with name " + defaultSpriteName + " found");
+        }
+        SpriteLoader.defaultSpriteName = defaultSpriteName;
+    }
 }
