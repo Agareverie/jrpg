@@ -1,4 +1,4 @@
-package com.jrpg.renderer;
+package com.jrpg.rendering;
 
 import java.awt.*;
 import java.net.*;
@@ -48,7 +48,7 @@ public class SpriteLoader {
         });
 
         paths.close();
-        
+
         if(!sprites.containsKey(defaultSpriteName)){
             throw new RuntimeException("no default sprite with name " + defaultSpriteName + " found");
         }

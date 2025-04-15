@@ -1,8 +1,8 @@
-package com.jrpg.renderer.graphics;
+package com.jrpg.rendering.graphics;
 
 import java.awt.*;
 
-import com.jrpg.renderer.Coordinate;
+import com.jrpg.rendering.Coordinate;
 
 public class Sprite implements GraphicsObject{
     private Coordinate position;

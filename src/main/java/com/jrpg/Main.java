@@ -4,10 +4,8 @@ import java.awt.*;
 import javax.swing.*;
 
 import com.jrpg.engine.*;
-import com.jrpg.renderer.Coordinate;
-import com.jrpg.renderer.Renderer;
-import com.jrpg.renderer.SpriteLoader;
-import com.jrpg.renderer.graphics.Sprite;
+import com.jrpg.rendering.*;
+import com.jrpg.rendering.graphics.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,9 +23,9 @@ public class Main {
         //copied this from the other demo
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Renderer renderer = new Renderer(frame);
-        Coordinate position = new Coordinate(100, 300);
-        Coordinate velocitiy = new Coordinate(16, -9);
+        GraphicsRenderer renderer = new GraphicsRenderer(frame);
+        Coordinate position = new Coordinate(0, 0);
+        Coordinate velocitiy = new Coordinate(16, 9);
 
         Image sprite = SpriteLoader.getSprite("testSprite1");
         //Image sprite = SpriteLoader.getSprite("testSprite2");
@@ -50,7 +48,6 @@ public class Main {
             }
 
             renderer.add(new Sprite(position, new Coordinate(100, 100), sprite));
-
             renderer.render();
 
             //poor man's time.sleep()

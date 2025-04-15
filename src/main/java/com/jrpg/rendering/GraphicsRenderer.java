@@ -1,18 +1,18 @@
-package com.jrpg.renderer;
+package com.jrpg.rendering;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.*;
 
-import com.jrpg.renderer.graphics.GraphicsObject;
+import com.jrpg.rendering.graphics.GraphicsObject;
 
 import java.awt.*;
 
-public class Renderer {
+public class GraphicsRenderer {
     private JFrame frame;
     private CopyOnWriteArrayList<GraphicsObject> graphicsObjects;
     private Dimension dimensions = new Dimension(1200, 675);
-    public Renderer(JFrame frame) {
+    public GraphicsRenderer(JFrame frame) {
         this.frame = frame;
 
         //TODO not hardcode this maybe??? idk ¯\_(ツ)_/¯

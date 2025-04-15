@@ -1,4 +1,4 @@
-package com.jrpg.renderer.graphics;
+package com.jrpg.rendering.graphics;
 import java.awt.Graphics;
 
 public interface GraphicsObject {
