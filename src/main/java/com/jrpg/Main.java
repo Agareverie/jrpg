@@ -24,6 +24,7 @@ public class Main {
     
         //copied this from the other demo
         JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Renderer renderer = new Renderer(frame);
         Coordinate position = new Coordinate(100, 300);
         Coordinate velocitiy = new Coordinate(16, -9);
