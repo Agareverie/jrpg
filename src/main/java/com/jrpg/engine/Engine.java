@@ -14,13 +14,24 @@ public class Engine {
         return currentScene;
     }
 
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public GameInputHandler getGameInputHandler() {
+        return gameInputHandler;
+    }
+
     public Engine(JFrame frame, ArrayList<Scene> scenes){
         this.scenes = scenes;
         this.currentScene = scenes.get(0);
 
         camera = new Camera(this, frame);
         gameInputHandler = new GameInputHandler(this, frame);
-        //for testing
+    }
+
+    public ArrayList<GameObject> getCurrentSceneGameObjects(){
+        return currentScene.getGameObjects();
     }
 
     public void update(){

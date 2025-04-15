@@ -26,14 +26,15 @@ public class Main {
         JFrame frame = new JFrame("JRPG");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ArrayList<Scene> scenes = new ArrayList<Scene>();
-        
+
         Scene scene = new Scene();
+        scene.add(new GameObject(new Vector2D(0, 0), new Vector2D(70, 70), ""));
         scene.add(new GameObject(new Vector2D(100, 100), new Vector2D(70, 70), "testSprite1"));
         scene.add(new GameObject(new Vector2D(200, 100), new Vector2D(70, 70), "testSprite2"));
         scenes.add(scene);
 
         Engine engine = new Engine(frame, scenes);
-
+        
         while (true){
             engine.update();
             try{

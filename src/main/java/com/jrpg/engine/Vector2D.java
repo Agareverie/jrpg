@@ -23,6 +23,10 @@ public class Vector2D {
         return new Vector2D(0, 0);
     }
 
+    static double getDistance(Vector2D v0, Vector2D v1){
+        return v0.sub(v1).getLength();
+    }
+
     public Vector2D(double x, double y){
         this.x = x;
         this.y = y;
