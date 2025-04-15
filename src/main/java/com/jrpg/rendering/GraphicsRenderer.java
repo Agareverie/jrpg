@@ -11,8 +11,7 @@ import java.awt.*;
 public class GraphicsRenderer {
     private JFrame frame;
     private CopyOnWriteArrayList<GraphicsObject> graphicsObjects;
-    private Dimension dimensions = new Dimension(1200, 675);
-    public GraphicsRenderer(JFrame frame) {
+    public GraphicsRenderer(JFrame frame, Dimension dimensions) {
         this.frame = frame;
 
         //TODO not hardcode this maybe??? idk ¯\_(ツ)_/¯

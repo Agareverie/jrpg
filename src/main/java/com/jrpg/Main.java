@@ -1,6 +1,8 @@
 package com.jrpg;
 
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 import com.jrpg.engine.*;
@@ -21,39 +23,24 @@ public class Main {
         // command.run().accept(null);
     
         //copied this from the other demo
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("JRPG");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        GraphicsRenderer renderer = new GraphicsRenderer(frame);
-        Coordinate position = new Coordinate(0, 0);
-        Coordinate velocitiy = new Coordinate(16, 9);
+        ArrayList<Scene> scenes = new ArrayList<Scene>();
+        
+        Scene scene = new Scene();
+        scene.add(new GameObject(new Vector2D(100, 100), new Vector2D(70, 70), "testSprite1"));
+        scene.add(new GameObject(new Vector2D(200, 100), new Vector2D(70, 70), "testSprite2"));
+        scenes.add(scene);
 
-        Image sprite = SpriteLoader.getSprite("testSprite1");
-        //Image sprite = SpriteLoader.getSprite("testSprite2");
-        //Image sprite = SpriteLoader.getSprite("invalidSprite");
+        Engine engine = new Engine(frame, scenes);
 
         while (true){
-            renderer.clear();
+            engine.update();
+            try{
+                Thread.sleep(Math.round(1000/24));
+            } catch(InterruptedException e){
 
-            position = position.add(velocitiy);
-
-            //im probably switching Coordinate back to using public for x and y
-            //but i was just experimenting
-            if(position.getX() + 100 > 1200 || position.getX() < 0){
-                velocitiy.setX(velocitiy.getX() * -1);
             }
-
-            
-            if(position.getY() + 100 > 675 || position.getY() < 0){
-                velocitiy.setY(velocitiy.getY() * -1);
-            }
-
-            renderer.add(new Sprite(position, new Coordinate(100, 100), sprite));
-            renderer.add(new Text("Test", position.add(0,-20), new Font("arial", Font.PLAIN, 20)));
-            renderer.add(new Text("Test", position.add(0,-60), new Font("Serif", Font.BOLD, 40)));
-            renderer.render();
-
-            //poor man's time.sleep()
-            for(int j = 0; j < 200000000; j++) {};
         }
     }
 }
