@@ -11,19 +11,19 @@ import java.awt.*;
 public class Renderer {
     private JFrame frame;
     private CopyOnWriteArrayList<GraphicsObject> graphicsObjects;
-
+    private Dimension dimensions = new Dimension(1200, 675);
     public Renderer(JFrame frame) {
         this.frame = frame;
 
         //TODO not hardcode this maybe??? idk ¯\_(ツ)_/¯
-        frame.setSize(1200, 675);
         frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(Color.DARK_GRAY);
 
         this.graphicsObjects = new CopyOnWriteArrayList<GraphicsObject>();
-        frame.getContentPane().add(new GraphicsPanel(graphicsObjects));
+        GraphicsPanel graphicsPanel = new GraphicsPanel(graphicsObjects);
+        graphicsPanel.setPreferredSize(dimensions);
+        frame.getContentPane().add(graphicsPanel);
 
+        frame.pack();
         frame.setVisible(true);
     }
 
