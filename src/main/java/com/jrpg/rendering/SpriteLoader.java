@@ -82,6 +82,7 @@ public class SpriteLoader {
         if (!getInstance().sprites.containsKey(defaultSpriteName)) {
             throw new RuntimeException("no default sprite with name " + defaultSpriteName + " found");
         }
+
         SpriteLoader.defaultSpriteName = defaultSpriteName;
     }
 }

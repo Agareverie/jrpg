@@ -17,8 +17,6 @@ class GraphicsPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        drawables.forEach((graphicsObject) -> {
-            graphicsObject.draw(g);
-        });
+        drawables.forEach((graphicsObject) -> graphicsObject.draw(g));
     }
 }
