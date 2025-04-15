@@ -1,21 +1,22 @@
 package com.jrpg.engine;
 
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.swing.JFrame;
 
 public class GameInputHandler {
     private Engine engine;
-    private ArrayList<KeyEvent> unhandledEvents;
+    private Queue<KeyEvent> unhandledEventsQueue;
 
-    public ArrayList<KeyEvent> getUnhandledEvents() {
-        return unhandledEvents;
+    public Queue<KeyEvent> getUnhandledEventsQueue() {
+        return unhandledEventsQueue;
     }
 
     public GameInputHandler(Engine engine, JFrame frame) {
         this.engine = engine;
-        this.unhandledEvents = new ArrayList<KeyEvent>();
+        this.unhandledEventsQueue = new LinkedList<KeyEvent>();
         frame.addKeyListener(new GameInputListener(this));
     }
 
@@ -24,11 +25,9 @@ public class GameInputHandler {
     }
 
     public void update() {
-        unhandledEvents.forEach((KeyEvent e) -> {
-            handleInput(e);
-        });
-
-        unhandledEvents.clear();
+        while(unhandledEventsQueue.peek() != null){
+            handleInput(unhandledEventsQueue.poll());
+        }
     }
 }
 
@@ -41,9 +40,7 @@ class GameInputListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        gameInputHandler.getUnhandledEvents().add(e);
-
-        System.out.println(e.getKeyChar() + " was pressed");
+        gameInputHandler.getUnhandledEventsQueue().add(e);
     }
 
     @Override
