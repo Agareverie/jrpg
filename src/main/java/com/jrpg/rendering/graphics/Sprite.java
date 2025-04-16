@@ -11,7 +11,7 @@ public record Sprite(Coordinate position, Coordinate dimensions, Image image) im
     }
 
     public static Sprite centered(Coordinate position, Image image) {
-        return new Sprite(position, new Coordinate(image.getWidth(null), image.getHeight(null)), image);
+        return new Sprite(Coordinate.toCentered(position, new Coordinate(image.getWidth(null), image.getHeight(null))), image);
     }
 
     public Sprite(Coordinate position, Image image) {
