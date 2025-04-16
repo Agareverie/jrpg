@@ -2,7 +2,7 @@ package com.jrpg.engine;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.jrpg.rendering.*;
 import com.jrpg.rendering.graphics.Rectangle;
@@ -87,10 +87,9 @@ public class Camera {
         renderer.add(new UnfilledRectangle(position.toCoordinate(), new Coordinate(200, 300), 2, Color.black));
 
         // add action text
-        // TODO: this needs to pull the actions from elsewhere to support general actions
         // that aren't part of a gameObject by themselves
         int selectedIndex = gameInputHandler.getCurrentMenuIndex();
-        ArrayList<GameAction> gameActions = currentGameObject.getGameActions();
+        List<GameAction> gameActions = engine.getCurrentActions();
         for (int i = 0; i < gameActions.size(); i++) {
             GameAction gameAction = gameActions.get(i);
             renderer.add(new Text(gameAction.getName(), position.add(0, 15 + 15 * i).toCoordinate(), Color.black, font.deriveFont(i == selectedIndex? Font.BOLD : Font.PLAIN)));

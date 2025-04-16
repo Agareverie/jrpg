@@ -1,5 +1,6 @@
 package com.jrpg.engine;
 
+import java.util.List;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -32,6 +33,15 @@ public class Engine {
 
     public ArrayList<GameObject> getCurrentSceneGameObjects(){
         return currentScene.getGameObjects();
+    }
+
+    public GameObject getCurrentSelectedGameObject(){
+        return gameInputHandler.getCurrentGameObject();
+    }
+
+    //TODO add generic actions
+    public List<GameAction> getCurrentActions(){
+        return getCurrentSelectedGameObject().getGameActions();
     }
 
     public void update(){
