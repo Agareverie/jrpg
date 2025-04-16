@@ -95,15 +95,15 @@ public class Camera {
         for (DialogueLine dialogueLine : dialogueLines) {
             currentYOffset += dialogueLine.getMaxFontSize() + dialougeBoxLineSpacing;
             int currentXOffset = dialogueBoxPadding;
-            for (SimpleEntry<String,Font> stringFontPair : dialogueLine.getStringFontPairs()) {
-                String string = stringFontPair.getKey();
-                Font font = stringFontPair.getValue();
-                renderer.add(new Text(string, dialogueBoxPosition.add(currentXOffset, currentYOffset).toCoordinate(), Color.black, font));
+            for (StyledText textFragment : dialogueLine.getTextFragments()) {
+                String text = textFragment.getText();
+                Font font = textFragment.getFont();
+                renderer.add(new Text(text, dialogueBoxPosition.add(currentXOffset, currentYOffset).toCoordinate(), textFragment.getColor(), font));
 
                 FontMetrics metrics = new FontMetrics(font) {
                     
                 };
-                currentXOffset += metrics.getStringBounds(string, null).getWidth();
+                currentXOffset += metrics.getStringBounds(text, null).getWidth();
             }
         }
     }
