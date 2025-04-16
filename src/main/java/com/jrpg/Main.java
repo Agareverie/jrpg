@@ -13,21 +13,22 @@ public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame("JRPG");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Font font = new Font("Serif", Font.PLAIN, 24);
         ArrayList<Scene> scenes = new ArrayList<Scene>();
 
-        GameAction nudgeLeft = new GameAction("Nudge Left", "Nudges the current object left", (Engine engine) -> {
+        GameAction nudgeLeft = new GameAction("Nudge Left", new DialogueLine("Nudges the current object left", font), (Engine engine) -> {
             GameObject currentGameObject = engine.getGameInputHandler().getCurrentGameObject();
             currentGameObject.setPosition(currentGameObject.getPosition().add(-10, 0));
         });
-        GameAction nudgeRight = new GameAction("Nudge Right", "Nudges the current object right", (Engine engine) -> {
+        GameAction nudgeRight = new GameAction("Nudge Right", new DialogueLine("Nudges the current object right", font), (Engine engine) -> {
             GameObject currentGameObject = engine.getGameInputHandler().getCurrentGameObject();
             currentGameObject.setPosition(currentGameObject.getPosition().add(10, 0));
         });
-        GameAction nudgeUp = new GameAction("Nudge Up", "Nudges the current object up", (Engine engine) -> {
+        GameAction nudgeUp = new GameAction("Nudge Up", new DialogueLine("Nudges the current object up", font), (Engine engine) -> {
             GameObject currentGameObject = engine.getGameInputHandler().getCurrentGameObject();
             currentGameObject.setPosition(currentGameObject.getPosition().add(0, -10));
         });
-        GameAction nudgeDown = new GameAction("Nudge Down", "Nudges the current object down", (Engine engine) -> {
+        GameAction nudgeDown = new GameAction("Nudge Down", new DialogueLine("Nudges the current object down", font), (Engine engine) -> {
             GameObject currentGameObject = engine.getGameInputHandler().getCurrentGameObject();
             currentGameObject.setPosition(currentGameObject.getPosition().add(0, 10));
         });
@@ -47,6 +48,19 @@ public class Main {
 
         Engine engine = new Engine(frame, scenes);
 
+        DialogueLine testLine1 = new DialogueLine();
+        testLine1.add("test1 ", new Font("Serif", Font.PLAIN, 20));
+        testLine1.add("test2 ", new Font("Serif", Font.PLAIN, 25));
+        testLine1.add("test3", new Font("Arial", Font.BOLD, 25));
+
+        DialogueLine testLine2 = new DialogueLine();
+        testLine2.add("test1 ", new Font("Serif", Font.PLAIN, 20));
+        testLine2.add("test2 ", new Font("Serif", Font.PLAIN, 25));
+        testLine2.add("test3", new Font("Arial", Font.BOLD, 25));
+        //this part needs to change
+        //currently the lines are added manually for testing
+        engine.getCamera().addDialogueLine(testLine1);
+        engine.getCamera().addDialogueLine(testLine2);
         while (true) {
             engine.update();
             try {

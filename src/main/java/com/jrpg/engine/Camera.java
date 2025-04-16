@@ -2,7 +2,9 @@ package com.jrpg.engine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.AbstractMap.SimpleEntry;
 
 import com.jrpg.rendering.*;
 import com.jrpg.rendering.graphics.Rectangle;
@@ -12,13 +14,21 @@ import com.jrpg.rendering.graphics.UnfilledRectangle;
 
 public class Camera {
     private Dimension dimensions = new Dimension(1200, 675);
+    //TODO a settings class
     private int dialogueBoxHeight = 200;
+    private int dialogueBoxPadding = 5;
+    private int dialougeBoxLineSpacing = 1;
     private Font font = new Font("Serif", Font.PLAIN, 20);
     private Engine engine;
     private GraphicsRenderer renderer;
 
+    private List<DialogueLine> dialogueLines = new ArrayList<DialogueLine>();
+
+    private Color dialogueBoxColor = new Color(.8f, .8f, 1.f);
+    private Color contextMenuColor = new Color(.8f, .8f, 1.f, .8f);
+
     // for animations
-    double time = 0.;
+    private double time = 0.;
 
     Camera(Engine engine, JFrame frame) {
         this.engine = engine;
@@ -39,7 +49,8 @@ public class Camera {
         if (engine.getGameState().isInMenu()) {
             renderer.add(Sprite.centered(
                     currentGameObject.getPosition()
-                            .add(-20 + 10 * Math.sin(time),10 + gameInputHandler.getCurrentMenuIndex() * 15).toCoordinate(),
+                            .add(-20 + 10 * Math.sin(time), 10 + gameInputHandler.getCurrentMenuIndex() * 15)
+                            .toCoordinate(),
                     new Coordinate(50, 50), SpriteLoader.getSprite("arrow_right")));
         } else if (currentGameObject != null) {
             renderer.add(Sprite.centered(
@@ -58,21 +69,43 @@ public class Camera {
     }
 
     private void addUIObjects() {
-        GameInputHandler gameInputHandler = engine.getGameInputHandler();
-
         // bottom dialogue box
-        renderer.add(new Rectangle(new Coordinate(0, (int) this.dimensions.getHeight() - this.dialogueBoxHeight),
-                new Coordinate((int) this.dimensions.getWidth(), dialogueBoxHeight), new Color(.8f, .8f, 1.f)));
+        addDialogueBox();
 
-        //TODO completely refactor how menu is rendered to be more modifiable
-        //currently it works off of hardcoded constants
+        // TODO completely refactor how menu is rendered to be more modifiable
+        // currently it works off of hardcoded constants
         // menu
         if (engine.getGameState().isInMenu())
             addMenu();
 
         addCursor();
-        
 
+    }
+
+    public void addDialogueLine(DialogueLine dialogueLine){
+        dialogueLines.add(dialogueLine);
+    }
+
+    private void addDialogueBox() {
+        Vector2D dialogueBoxPosition = new Vector2D(0, this.dimensions.getHeight() - this.dialogueBoxHeight);
+        renderer.add(new Rectangle(dialogueBoxPosition.toCoordinate(),
+                new Coordinate((int) this.dimensions.getWidth(), dialogueBoxHeight), dialogueBoxColor));
+
+        int currentYOffset = dialogueBoxPadding;
+        for (DialogueLine dialogueLine : dialogueLines) {
+            currentYOffset += dialogueLine.getMaxFontSize() + dialougeBoxLineSpacing;
+            int currentXOffset = dialogueBoxPadding;
+            for (SimpleEntry<String,Font> stringFontPair : dialogueLine.getStringFontPairs()) {
+                String string = stringFontPair.getKey();
+                Font font = stringFontPair.getValue();
+                renderer.add(new Text(string, dialogueBoxPosition.add(currentXOffset, currentYOffset).toCoordinate(), Color.black, font));
+
+                FontMetrics metrics = new FontMetrics(font) {
+                    
+                };
+                currentXOffset += metrics.getStringBounds(string, null).getWidth();
+            }
+        }
     }
 
     private void addMenu() {
@@ -83,7 +116,7 @@ public class Camera {
                 : currentGameObject.getPosition();
 
         // render menu box
-        renderer.add(new Rectangle(position.toCoordinate(), new Coordinate(200, 300), new Color(.8f, .8f, 1.f, .8f)));
+        renderer.add(new Rectangle(position.toCoordinate(), new Coordinate(200, 300), contextMenuColor));
         renderer.add(new UnfilledRectangle(position.toCoordinate(), new Coordinate(200, 300), 2, Color.black));
 
         // add action text

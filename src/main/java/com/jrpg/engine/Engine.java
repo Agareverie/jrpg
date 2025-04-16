@@ -10,7 +10,7 @@ public class Engine {
     private Camera camera;
     private GameInputHandler gameInputHandler;
     private ArrayList<Scene> scenes;
-    private GameState gameState = new GameState();
+    private GameState gameState = new GameState(this);
 
     public Scene getCurrentScene() {
         return currentScene;

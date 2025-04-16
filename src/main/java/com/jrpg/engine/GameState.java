@@ -1,6 +1,7 @@
 package com.jrpg.engine;
 
 public class GameState {
+    private Engine engine;
     private boolean inMenu = false;
     private boolean inDialogue = false;
     private boolean paused = false;
@@ -22,5 +23,9 @@ public class GameState {
     }
     public void setPaused(boolean paused) {
         this.paused = paused;
+    }
+
+    public GameState(Engine engine){
+        this.engine = engine;
     }
 }
