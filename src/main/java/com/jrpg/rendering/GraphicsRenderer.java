@@ -1,24 +1,21 @@
 package com.jrpg.rendering;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import com.jrpg.rendering.graphics.Drawable;
 
 import javax.swing.*;
-
-import com.jrpg.rendering.graphics.GraphicsObject;
-
 import java.awt.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+
 
 public class GraphicsRenderer {
     private JFrame frame;
-    private CopyOnWriteArrayList<GraphicsObject> graphicsObjects;
+    private CopyOnWriteArrayList<Drawable> drawables = new CopyOnWriteArrayList<Drawable>();
     public GraphicsRenderer(JFrame frame, Dimension dimensions) {
         this.frame = frame;
-
-        //TODO not hardcode this maybe??? idk ¯\_(ツ)_/¯
         frame.setResizable(false);
 
-        this.graphicsObjects = new CopyOnWriteArrayList<GraphicsObject>();
-        GraphicsPanel graphicsPanel = new GraphicsPanel(graphicsObjects);
+        GraphicsPanel graphicsPanel = new GraphicsPanel(drawables);
         graphicsPanel.setPreferredSize(dimensions);
         frame.getContentPane().add(graphicsPanel);
 
@@ -26,32 +23,15 @@ public class GraphicsRenderer {
         frame.setVisible(true);
     }
 
-    public void add(GraphicsObject graphicsObject){
-        graphicsObjects.add(graphicsObject);
+    public void add(Drawable drawable){
+        drawables.add(drawable);
     }
 
     public void clear() {
-        this.graphicsObjects.clear();
+        this.drawables.clear();
     }
 
     public void render() {
         frame.repaint();
-    }
-}
-
-//i can't think of a good name for this
-class GraphicsPanel extends JPanel {
-    private CopyOnWriteArrayList<GraphicsObject> graphicsObjects;
-
-    public GraphicsPanel(CopyOnWriteArrayList<GraphicsObject> graphicsObjects) {
-        super();
-        this.graphicsObjects = graphicsObjects;
-    }
-
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        graphicsObjects.forEach((graphicsObject) -> {
-            graphicsObject.draw(g);
-        });
     }
 }

@@ -4,8 +4,11 @@ import java.awt.*;
 
 import com.jrpg.rendering.Coordinate;
 
+
+//TODO: a better solution to this
 public class UnfilledRectangle extends Rectangle {
     private int strokeWidth;
+
     public UnfilledRectangle(Coordinate position, Coordinate dimensions, int strokeWidth, Color color){
         super(position, dimensions, color);
         this.strokeWidth = strokeWidth;

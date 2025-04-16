@@ -20,6 +20,17 @@ public class Coordinate {
         this.y = y;
     }
 
+    /**
+     * 
+     * @param position
+     * @param dimensions
+     * @return a new position projected such that, when a rectangle is drawn at the position with the given dimensions,
+     * has the original position appear in the center of the rectangle
+     */
+    public static Coordinate toCentered(Coordinate position, Coordinate dimensions){
+        return new Coordinate(position.getX() - (dimensions.getX() / 2), position.getY() - (dimensions.getY() / 2));
+    }
+
     public Coordinate(int x, int y){
         this.x = x;
         this.y = y;

@@ -5,9 +5,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import com.jrpg.rendering.*;
-import com.jrpg.rendering.graphics.CenteredRectangle;
-import com.jrpg.rendering.graphics.CenteredSprite;
 import com.jrpg.rendering.graphics.Rectangle;
+import com.jrpg.rendering.graphics.Sprite;
 import com.jrpg.rendering.graphics.Text;
 import com.jrpg.rendering.graphics.UnfilledRectangle;
 
@@ -15,7 +14,6 @@ public class Camera {
     private Dimension dimensions = new Dimension(1200, 675);
     private int dialogueBoxHeight = 200;
     private Font font = new Font("Serif", Font.PLAIN, 20);
-    private Font fontBolded = new Font("Serif", Font.BOLD, 20);
     Engine engine;
     GraphicsRenderer renderer;
 
@@ -39,12 +37,12 @@ public class Camera {
         GameObject currentGameObject = gameInputHandler.getCurrentGameObject();
 
         if (gameInputHandler.isInMenu()) {
-            renderer.add(new CenteredSprite(
+            renderer.add(Sprite.centered(
                     currentGameObject.getPosition()
                             .add(-20 + 10 * Math.sin(time),10 + gameInputHandler.getCurrentMenuIndex() * 15).toCoordinate(),
                     new Coordinate(50, 50), SpriteLoader.getSprite("arrow_right")));
         } else if (currentGameObject != null) {
-            renderer.add(new CenteredSprite(
+            renderer.add(Sprite.centered(
                     currentGameObject.getPosition().add(0, 50 + 10 * Math.sin(time)).toCoordinate(),
                     new Coordinate(50, 50), SpriteLoader.getSprite("arrow")));
         }
@@ -54,7 +52,7 @@ public class Camera {
         Scene currentScene = engine.getCurrentScene();
 
         for (GameObject gameObject : currentScene.getGameObjects()) {
-            renderer.add(new CenteredSprite(gameObject.getPosition().toCoordinate(),
+            renderer.add(Sprite.centered(gameObject.getPosition().toCoordinate(),
                     gameObject.getDimensions().toCoordinate(), SpriteLoader.getSprite(gameObject.getSpriteName())));
         }
     }
@@ -95,7 +93,7 @@ public class Camera {
         ArrayList<GameAction> gameActions = currentGameObject.getGameActions();
         for (int i = 0; i < gameActions.size(); i++) {
             GameAction gameAction = gameActions.get(i);
-            renderer.add(new Text(gameAction.getName(), position.add(0, 15 + 15 * i).toCoordinate(), i == selectedIndex? fontBolded : font));
+            renderer.add(new Text(gameAction.getName(), position.add(0, 15 + 15 * i).toCoordinate(), Color.black, font.deriveFont(i == selectedIndex? Font.BOLD : Font.PLAIN)));
         }
     }
 
