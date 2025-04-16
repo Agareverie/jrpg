@@ -28,7 +28,7 @@ public class GameInputHandler {
     public GameInputHandler(Engine engine, JFrame frame) {
         this.engine = engine;
         this.unhandledEventsQueue = new LinkedList<KeyEvent>();
-        frame.addKeyListener(new GameInputListener(this));
+        frame.addKeyListener(new GameKeyListener(this));
     }
 
     /**
@@ -179,28 +179,5 @@ public class GameInputHandler {
         while (unhandledEventsQueue.peek() != null) {
             handleInput(unhandledEventsQueue.poll());
         }
-    }
-}
-
-class GameInputListener implements KeyListener {
-    GameInputHandler gameInputHandler;
-
-    public GameInputListener(GameInputHandler gameInputHandler) {
-        this.gameInputHandler = gameInputHandler;
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        gameInputHandler.getUnhandledEventsQueue().add(e);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
     }
 }
