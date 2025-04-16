@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class GameObject {
 
-    //fields for rendering
     private Vector2D position;
     private Vector2D dimensions;
     private String spriteName;

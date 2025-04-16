@@ -32,6 +32,11 @@ public class Main {
             GameObject currentGameObject = engine.getGameInputHandler().getCurrentGameObject();
             currentGameObject.setPosition(currentGameObject.getPosition().add(0, 10));
         });
+        GameAction talk = new GameAction("Talk", new DialogueLine("Talks", Color.black, font), (Engine engine) -> {
+            GameObject currentGameObject = engine.getCurrentSelectedGameObject();
+            String name = currentGameObject.getSpriteName() == "testSprite1" ? "Shiroko" : "Sensei";
+            engine.enqueueDialogue(Dialogue.fromString("Hello, My Name Is " + name + "\nGood night", Color.black, font));
+        });
 
         Scene scene = new Scene();
 
@@ -41,6 +46,7 @@ public class Main {
             gameObject.addGameAction(nudgeRight);
             gameObject.addGameAction(nudgeUp);
             gameObject.addGameAction(nudgeDown);
+            gameObject.addGameAction(talk);
             scene.add(gameObject);
         }
 
@@ -57,10 +63,17 @@ public class Main {
         testLine2.add("test1 ", Color.black, new Font("Serif", Font.PLAIN, 20));
         testLine2.add("test2 ", Color.red, new Font("Serif", Font.PLAIN, 25));
         testLine2.add("test3", Color.green, new Font("Arial", Font.BOLD, 25));
-        //this part needs to change
-        //currently the lines are added manually for testing
-        engine.getCamera().addDialogueLine(testLine1);
-        engine.getCamera().addDialogueLine(testLine2);
+        
+        Dialogue dialogue1 = new Dialogue();
+        dialogue1.addLine(testLine1);
+        dialogue1.addLine(testLine2);
+        Dialogue dialogue2 = new Dialogue();
+        dialogue2.addLine(testLine2);
+        dialogue2.addLine(testLine1);
+
+        engine.enqueueDialogue(dialogue1);
+        engine.enqueueDialogue(dialogue2);
+
         while (true) {
             engine.update();
             try {

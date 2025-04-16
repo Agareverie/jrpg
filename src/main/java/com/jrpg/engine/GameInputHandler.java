@@ -1,6 +1,7 @@
 package com.jrpg.engine;
 
 import java.awt.event.*;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -57,17 +58,32 @@ public class GameInputHandler {
 
     /**
      * 
-     * @return returns the current selected menu index, or null if there is
+     * @return returns the current selected game action index, or null if there is
      *         currently no menu open
      */
-    public Integer getCurrentMenuIndex() {
+    public Integer getCurrentGameActionIndex() {
         if (!engine.getGameState().isInMenu())
             return null;
+        
+        List<GameAction> gameActions = engine.getCurrentActions();
+        int index = selectionIndexes[1];
+
+        //so that the menu index appear in approximately the same location whenever the menu is opened
+        if(index >= gameActions.size()) index = gameActions.size() - 1;
+        if(index < 0) index = 0;
+        selectionIndexes[1] = index;
+
         return selectionIndexes[1];
     }
 
+    public GameAction getCurrentGameAction() {
+        Integer index = getCurrentGameActionIndex();
+        if (index == null)
+            return null;
+        return engine.getCurrentActions().get(index);
+    }
+
     private void handleInput(KeyEvent e) {
-        GameState gameState = engine.getGameState();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
                 handleDirectionalInput("left");
@@ -82,19 +98,35 @@ public class GameInputHandler {
                 handleDirectionalInput("down");
                 break;
             case KeyEvent.VK_Z:
-                if (gameState.isInMenu())
-                    getCurrentGameObject().getGameActions().get(selectionIndexes[1]).getOnRun().accept(engine);
-                gameState.setInMenu(!gameState.isInMenu());
+                handleConfirm();
                 break;
             case KeyEvent.VK_X:
-                gameState.setInMenu(false);
+                handleCancel();
 
         }
     }
 
+    private void handleConfirm() {
+        GameState gameState = engine.getGameState();
+        if (gameState.isInDialogue()) {
+            engine.finishDialogue();
+        } else {
+            if (gameState.isInMenu())
+                engine.getCurrentActions().get(selectionIndexes[1]).getOnRun().accept(engine);
+            gameState.setInMenu(!gameState.isInMenu());
+        }
+    }
+
+    private void handleCancel() {
+        engine.getGameState().setInMenu(false);
+    }
+
     private void handleDirectionalInput(String direction) {
-        if (engine.getGameState().isInMenu()) {
-            ArrayList<GameAction> gameActions = getCurrentGameObject().getGameActions();
+        GameState gameState = engine.getGameState();
+        if (gameState.isInDialogue())
+            return; // don't handle movement during dialogue
+        if (gameState.isInMenu()) {
+            List<GameAction> gameActions = engine.getCurrentActions();
             switch (direction) {
                 case "up":
                     this.selectionIndexes[1]--;

@@ -18,11 +18,10 @@ public class Camera {
     private int dialogueBoxHeight = 200;
     private int dialogueBoxPadding = 5;
     private int dialougeBoxLineSpacing = 1;
-    private Font font = new Font("Serif", Font.PLAIN, 20);
+    private Font actionsMenuFont = new Font("Serif", Font.PLAIN, 20);
+    private Font infoFont = new Font("Serif", Font.PLAIN, 14);
     private Engine engine;
     private GraphicsRenderer renderer;
-
-    private List<DialogueLine> dialogueLines = new ArrayList<DialogueLine>();
 
     private Color dialogueBoxColor = new Color(.8f, .8f, 1.f);
     private Color contextMenuColor = new Color(.8f, .8f, 1.f, .8f);
@@ -49,7 +48,7 @@ public class Camera {
         if (engine.getGameState().isInMenu()) {
             renderer.add(Sprite.centered(
                     currentGameObject.getPosition()
-                            .add(-20 + 10 * Math.sin(time), 10 + gameInputHandler.getCurrentMenuIndex() * 15)
+                            .add(-20 + 10 * Math.sin(time), 10 + gameInputHandler.getCurrentGameActionIndex() * 15)
                             .toCoordinate(),
                     new Coordinate(50, 50), SpriteLoader.getSprite("arrow_right")));
         } else if (currentGameObject != null) {
@@ -82,15 +81,31 @@ public class Camera {
 
     }
 
-    public void addDialogueLine(DialogueLine dialogueLine){
-        dialogueLines.add(dialogueLine);
-    }
-
     private void addDialogueBox() {
-        Vector2D dialogueBoxPosition = new Vector2D(0, this.dimensions.getHeight() - this.dialogueBoxHeight);
-        renderer.add(new Rectangle(dialogueBoxPosition.toCoordinate(),
-                new Coordinate((int) this.dimensions.getWidth(), dialogueBoxHeight), dialogueBoxColor));
+        GameState gameState = engine.getGameState();
 
+        //render the box
+        Vector2D dialogueBoxPosition = new Vector2D(0, this.dimensions.getHeight() - this.dialogueBoxHeight);
+        Vector2D dialogueBoxDimensions = new Vector2D(this.dimensions.getWidth(), dialogueBoxHeight);
+        renderer.add(new Rectangle(dialogueBoxPosition.toCoordinate(),dialogueBoxDimensions.toCoordinate()
+                , dialogueBoxColor));
+        renderer.add(new UnfilledRectangle(dialogueBoxPosition.toCoordinate(),
+        dialogueBoxDimensions.toCoordinate(), 5, Color.black));
+
+        //choose where to get the data to render the text from
+        //(from the current dialogue, from current menu item, from current gameObject)
+        List<DialogueLine> dialogueLines;
+        if(gameState.isInDialogue()) dialogueLines = engine.getCurrentDialogue().getLines();
+        else if(gameState.isInMenu()) {
+            dialogueLines = new ArrayList<DialogueLine>();
+            GameAction currentAction = engine.getCurrentSelectedAction();
+            dialogueLines.add(currentAction.getDescription());
+        }else {
+            //TODO: create dialogueLines for displaying the selected gameObject info
+            return;
+        };
+
+        //render dialogue text
         int currentYOffset = dialogueBoxPadding;
         for (DialogueLine dialogueLine : dialogueLines) {
             currentYOffset += dialogueLine.getMaxFontSize() + dialougeBoxLineSpacing;
@@ -121,11 +136,11 @@ public class Camera {
 
         // add action text
         // that aren't part of a gameObject by themselves
-        int selectedIndex = gameInputHandler.getCurrentMenuIndex();
+        int selectedIndex = gameInputHandler.getCurrentGameActionIndex();
         List<GameAction> gameActions = engine.getCurrentActions();
         for (int i = 0; i < gameActions.size(); i++) {
             GameAction gameAction = gameActions.get(i);
-            renderer.add(new Text(gameAction.getName(), position.add(0, 15 + 15 * i).toCoordinate(), Color.black, font.deriveFont(i == selectedIndex? Font.BOLD : Font.PLAIN)));
+            renderer.add(new Text(gameAction.getName(), position.add(0, 15 + 15 * i).toCoordinate(), Color.black, actionsMenuFont.deriveFont(i == selectedIndex? Font.BOLD : Font.PLAIN)));
         }
     }
 
