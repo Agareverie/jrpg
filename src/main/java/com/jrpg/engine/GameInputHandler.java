@@ -15,14 +15,9 @@ public class GameInputHandler {
     // first one is objects in current scene
     // second one is actions in menus
     private int[] selectionIndexes = { 0, 0 };
-    private boolean inMenu = false;
 
     public Queue<KeyEvent> getUnhandledEventsQueue() {
         return unhandledEventsQueue;
-    }
-
-    public boolean isInMenu() {
-        return inMenu;
     }
 
     public GameInputHandler(Engine engine, JFrame frame) {
@@ -66,12 +61,13 @@ public class GameInputHandler {
      *         currently no menu open
      */
     public Integer getCurrentMenuIndex() {
-        if (!inMenu)
+        if (!engine.getGameState().isInMenu())
             return null;
         return selectionIndexes[1];
     }
 
     private void handleInput(KeyEvent e) {
+        GameState gameState = engine.getGameState();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
                 handleDirectionalInput("left");
@@ -86,18 +82,18 @@ public class GameInputHandler {
                 handleDirectionalInput("down");
                 break;
             case KeyEvent.VK_Z:
-                if (inMenu)
+                if (gameState.isInMenu())
                     getCurrentGameObject().getGameActions().get(selectionIndexes[1]).getOnRun().accept(engine);
-                inMenu = !inMenu;
+                gameState.setInMenu(!gameState.isInMenu());
                 break;
             case KeyEvent.VK_X:
-                inMenu = false;
+                gameState.setInMenu(false);
 
         }
     }
 
     private void handleDirectionalInput(String direction) {
-        if (inMenu) {
+        if (engine.getGameState().isInMenu()) {
             ArrayList<GameAction> gameActions = getCurrentGameObject().getGameActions();
             switch (direction) {
                 case "up":

@@ -10,6 +10,7 @@ public class Engine {
     private Camera camera;
     private GameInputHandler gameInputHandler;
     private ArrayList<Scene> scenes;
+    private GameState gameState = new GameState();
 
     public Scene getCurrentScene() {
         return currentScene;
@@ -17,6 +18,10 @@ public class Engine {
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public GameState getGameState(){
+        return this.gameState;
     }
 
     public GameInputHandler getGameInputHandler() {

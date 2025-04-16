@@ -14,8 +14,8 @@ public class Camera {
     private Dimension dimensions = new Dimension(1200, 675);
     private int dialogueBoxHeight = 200;
     private Font font = new Font("Serif", Font.PLAIN, 20);
-    Engine engine;
-    GraphicsRenderer renderer;
+    private Engine engine;
+    private GraphicsRenderer renderer;
 
     // for animations
     double time = 0.;
@@ -36,7 +36,7 @@ public class Camera {
         GameInputHandler gameInputHandler = engine.getGameInputHandler();
         GameObject currentGameObject = gameInputHandler.getCurrentGameObject();
 
-        if (gameInputHandler.isInMenu()) {
+        if (engine.getGameState().isInMenu()) {
             renderer.add(Sprite.centered(
                     currentGameObject.getPosition()
                             .add(-20 + 10 * Math.sin(time),10 + gameInputHandler.getCurrentMenuIndex() * 15).toCoordinate(),
@@ -67,7 +67,7 @@ public class Camera {
         //TODO completely refactor how menu is rendered to be more modifiable
         //currently it works off of hardcoded constants
         // menu
-        if (gameInputHandler.isInMenu())
+        if (engine.getGameState().isInMenu())
             addMenu();
 
         addCursor();
