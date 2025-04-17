@@ -95,7 +95,7 @@ public class Camera {
         if (gameState.isInDialogue())
             dialogueLines = engine.getCurrentDialogue().getLines();
         else if (gameState.isInActionMenu()) {
-            GameAction currentAction = engine.getCurrentSelectedAction();
+            GameAction currentAction = engine.getCurrentSelectedGameAction();
             Dialogue description = currentAction.getDescription();
             if(description == null) return; 
             dialogueLines = description.getLines();
@@ -142,7 +142,7 @@ public class Camera {
 
         // add action names
         int selectedIndex = gameInputHandler.getCurrentGameActionIndex();
-        List<GameAction> gameActions = engine.getCurrentActions();
+        List<GameAction> gameActions = engine.getCurrentGameActions();
 
         int currentYOffset = 0;
         // pages

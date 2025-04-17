@@ -11,7 +11,8 @@ public class Engine {
     private Scene currentScene;
     private Camera camera;
     private GameInputHandler gameInputHandler;
-    private ArrayList<Scene> scenes;
+    private List<Scene> scenes;
+    private List<GameAction> generalGameActions = new ArrayList<GameAction>();
     private Queue<Dialogue> dialogueQueue = new LinkedList<Dialogue>();
     private Dialogue currentDialogue;
     private GameState gameState = new GameState(this);
@@ -52,13 +53,32 @@ public class Engine {
         return gameInputHandler.getCurrentGameObject();
     }
 
-    //TODO add generic actions
-    public List<GameAction> getCurrentActions(){
-        return getCurrentSelectedGameObject().getGameActions();
+    public List<GameAction> getCurrentGameActions(){
+        GameObject currentGameObject = getCurrentSelectedGameObject();
+        List<GameAction> gameActions = new ArrayList<GameAction>();
+        
+        //add gameObject's actions
+        for(GameAction gameAction : currentGameObject.getGameActions()){
+            if(gameAction.getCondition().test(currentGameObject)) gameActions.add(gameAction);
+        }
+
+        //add general actions
+        for(GameAction gameAction : generalGameActions){
+            if(gameAction.getCondition().test(currentGameObject)) gameActions.add(gameAction);
+        }
+        return gameActions;
     }
 
-    public GameAction getCurrentSelectedAction(){
+    public GameAction getCurrentSelectedGameAction(){
         return gameInputHandler.getCurrentGameAction();
+    }
+
+    public void addGeneralGameAction(GameAction gameAction){
+        generalGameActions.add(gameAction);
+    }
+
+    public void removeGeneralGameAction(GameAction gameAction){
+        if(generalGameActions.contains(gameAction)) generalGameActions.remove(gameAction);
     }
 
     public void enqueueDialogue(Dialogue dialogue){

@@ -65,7 +65,7 @@ public class GameInputHandler {
         if (!engine.getGameState().isInActionMenu())
             return null;
 
-        List<GameAction> gameActions = engine.getCurrentActions();
+        List<GameAction> gameActions = engine.getCurrentGameActions();
         int index = selectionIndexes[1];
 
         // so that the menu index appear in approximately the same location whenever the
@@ -83,7 +83,7 @@ public class GameInputHandler {
         Integer index = getCurrentGameActionIndex();
         if (index == null)
             return null;
-        return engine.getCurrentActions().get(index);
+        return engine.getCurrentGameActions().get(index);
     }
 
     private void handleInput(KeyEvent e) {
@@ -115,7 +115,7 @@ public class GameInputHandler {
             engine.finishDialogue();
         } else {
             if (gameState.isInActionMenu())
-                engine.getCurrentActions().get(selectionIndexes[1]).getOnRun().accept(engine);
+                engine.getCurrentGameActions().get(selectionIndexes[1]).getOnRun().accept(engine);
             gameState.setInActionMenu(!gameState.isInActionMenu());
         }
     }
@@ -129,7 +129,7 @@ public class GameInputHandler {
         if (gameState.isInDialogue())
             return; // don't handle movement during dialogue
         if (gameState.isInActionMenu()) {
-            List<GameAction> gameActions = engine.getCurrentActions();
+            List<GameAction> gameActions = engine.getCurrentGameActions();
             switch (direction) {
                 case "up":
                     this.selectionIndexes[1]--;
