@@ -23,7 +23,7 @@ public class Camera {
     private int dialogueBoxPaddingY = 5;
     private int dialougeBoxLineSpacing = 1;
     private Font actionsMenuFont = new Font("Serif", Font.PLAIN, 20);
-    private int actionsMenuMaxActions = 7; // max actions before scrolling (also determins height)
+    private int actionsMenuMaxActionsPerPage = 7; // max actions before switching pages (also determins height)
     private int actionsMenuPaddingX = 3;
     private int actionsMenuPaddingY = 3;
     private int actionsMenuWidth = 300;
@@ -132,7 +132,7 @@ public class Camera {
 
         // render menu box
         Vector2D actionsBoxDimensions = new Vector2D(actionsMenuWidth,
-                (actionsMenuFont.getSize() + actionsMenuPaddingY) * actionsMenuMaxActions + 2 * actionsMenuPaddingY);
+                (actionsMenuFont.getSize() + actionsMenuPaddingY) * actionsMenuMaxActionsPerPage + 2 * actionsMenuPaddingY);
         renderer.add(new Rectangle(actionsBoxPosition.toCoordinate(), actionsBoxDimensions.toCoordinate(),
                 actionsMenuColor));
         renderer.add(new UnfilledRectangle(actionsBoxPosition.toCoordinate(), actionsBoxDimensions.toCoordinate(), 2,
@@ -144,8 +144,8 @@ public class Camera {
 
         int currentYOffset = 0;
         // pages
-        int pageOffset = actionsMenuMaxActions * Math.floorDiv(selectedIndex, actionsMenuMaxActions);
-        int currentPageActionsCount = Math.clamp(gameActions.size() - pageOffset, 0, actionsMenuMaxActions);
+        int pageOffset = actionsMenuMaxActionsPerPage * Math.floorDiv(selectedIndex, actionsMenuMaxActionsPerPage);
+        int currentPageActionsCount = Math.clamp(gameActions.size() - pageOffset, 0, actionsMenuMaxActionsPerPage);
         for (int i = 0; i < currentPageActionsCount; i++) {
             currentYOffset += actionsMenuFont.getSize() + actionsMenuPaddingY;
 
