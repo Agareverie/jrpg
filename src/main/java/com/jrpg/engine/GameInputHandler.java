@@ -64,13 +64,16 @@ public class GameInputHandler {
     public Integer getCurrentGameActionIndex() {
         if (!engine.getGameState().isInActionMenu())
             return null;
-        
+
         List<GameAction> gameActions = engine.getCurrentActions();
         int index = selectionIndexes[1];
 
-        //so that the menu index appear in approximately the same location whenever the menu is opened
-        if(index >= gameActions.size()) index = gameActions.size() - 1;
-        if(index < 0) index = 0;
+        // so that the menu index appear in approximately the same location whenever the
+        // menu is opened
+        if (index >= gameActions.size())
+            index = gameActions.size() - 1;
+        if (index < 0)
+            index = 0;
         selectionIndexes[1] = index;
 
         return selectionIndexes[1];
@@ -143,36 +146,38 @@ public class GameInputHandler {
             handleObjectSelectionChange(direction);
     }
 
-    // TODO maybe not use a string as an input and infer the direction directly from
-    // a keyEvent or something
     // works by moving to the closest gameObject in the direction given
+    // objects are selected from a cone
     private void handleObjectSelectionChange(String direction) {
         ArrayList<GameObject> gameObjects = engine.getCurrentSceneGameObjects();
         GameObject currentGameObject = getCurrentGameObject();
         Vector2D currentPosition = currentGameObject.getPosition();
 
-        // filter out objects in the wrong direction
+        // filter out gameObjects that don't pass the condition
         Predicate<Vector2D> filterCondition;
         switch (direction) {
             case "up":
-                filterCondition = (Vector2D position) -> {
-                    return position.getY() < currentPosition.getY();
+                filterCondition = (Vector2D relativePosition) -> {
+                    return relativePosition.getY() < 0
+                            && Math.abs(relativePosition.getX()) <= -relativePosition.getY() * 1.5;
                 };
                 break;
             case "down":
-                filterCondition = (Vector2D position) -> {
-                    return position.getY() > currentPosition.getY();
+                filterCondition = (Vector2D relativePosition) -> {
+                    return relativePosition.getY() > 0
+                            && Math.abs(relativePosition.getX()) <= relativePosition.getY() * 1.5;
                 };
-
                 break;
             case "left":
-                filterCondition = (Vector2D position) -> {
-                    return position.getX() < currentPosition.getX();
+                filterCondition = (Vector2D relativePosition) -> {
+                    return relativePosition.getX() < 0
+                            && Math.abs(relativePosition.getY()) <= -relativePosition.getX() * 1.5;
                 };
                 break;
             case "right":
-                filterCondition = (Vector2D position) -> {
-                    return position.getX() > currentPosition.getX();
+                filterCondition = (Vector2D relativePosition) -> {
+                    return relativePosition.getX() > 0
+                            && Math.abs(relativePosition.getY()) <= relativePosition.getX() * 1.5;
                 };
                 break;
             default:
@@ -185,11 +190,11 @@ public class GameInputHandler {
             GameObject gameObject = gameObjects.get(i);
             if (gameObject == currentGameObject)
                 continue;
-            Vector2D position = gameObject.getPosition();
+            Vector2D relativePosition = gameObject.getPosition().sub(currentPosition);
 
-            if (!filterCondition.test(position))
+            if (!filterCondition.test(relativePosition))
                 continue;
-            double distance = Vector2D.getDistance(position, currentPosition);
+            double distance = relativePosition.getLength();
             if (distance < minDistance) {
                 minIndex = i;
                 minDistance = distance;

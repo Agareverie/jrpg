@@ -39,7 +39,8 @@ public class Main {
         Scene scene = new Scene();
 
         for (int i = 0; i < 10; i++) {
-            GameObject gameObject = new GameObject(new Vector2D(170 + 80 * i, 150), new Vector2D(70, 70), i % 2 == 0? "testSprite1" : "testSprite2");
+            Vector2D position = new Vector2D(Math.floor(Math.random()* 1200 + 1), Math.floor(Math.random()* 475 + 1));
+            GameObject gameObject = new GameObject(position, new Vector2D(70, 70), i % 2 == 0? "testSprite1" : "testSprite2");
             gameObject.addGameAction(nudgeLeft);
             gameObject.addGameAction(nudgeRight);
             gameObject.addGameAction(nudgeUp);
