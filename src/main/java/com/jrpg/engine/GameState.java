@@ -2,11 +2,11 @@ package com.jrpg.engine;
 
 public class GameState {
     private Engine engine;
-    private boolean inMenu = false;
+    private boolean inActionMenu = false;
     private boolean paused = false;
 
-    public boolean isInMenu() {
-        return inMenu;
+    public boolean isInActionMenu() {
+        return inActionMenu;
     }
     public boolean isInDialogue() {
         return engine.getCurrentDialogue() != null;
@@ -14,8 +14,8 @@ public class GameState {
     public boolean isPaused() {
         return paused;
     }
-    public void setInMenu(boolean inMenu) {
-        this.inMenu = inMenu;
+    public void setInActionMenu(boolean inActionMenu) {
+        this.inActionMenu = inActionMenu;
     }
     public void setPaused(boolean paused) {
         this.paused = paused;

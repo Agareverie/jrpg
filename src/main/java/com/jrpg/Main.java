@@ -47,6 +47,13 @@ public class Main {
             gameObject.addGameAction(nudgeUp);
             gameObject.addGameAction(nudgeDown);
             gameObject.addGameAction(talk);
+            if(Math.random() < .5){
+                gameObject.addGameAction(nudgeLeft);
+            gameObject.addGameAction(nudgeRight);
+            gameObject.addGameAction(nudgeUp);
+            gameObject.addGameAction(nudgeDown);
+            gameObject.addGameAction(talk);
+            }
             scene.add(gameObject);
         }
 

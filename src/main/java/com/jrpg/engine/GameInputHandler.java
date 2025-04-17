@@ -62,7 +62,7 @@ public class GameInputHandler {
      *         currently no menu open
      */
     public Integer getCurrentGameActionIndex() {
-        if (!engine.getGameState().isInMenu())
+        if (!engine.getGameState().isInActionMenu())
             return null;
         
         List<GameAction> gameActions = engine.getCurrentActions();
@@ -111,21 +111,21 @@ public class GameInputHandler {
         if (gameState.isInDialogue()) {
             engine.finishDialogue();
         } else {
-            if (gameState.isInMenu())
+            if (gameState.isInActionMenu())
                 engine.getCurrentActions().get(selectionIndexes[1]).getOnRun().accept(engine);
-            gameState.setInMenu(!gameState.isInMenu());
+            gameState.setInActionMenu(!gameState.isInActionMenu());
         }
     }
 
     private void handleCancel() {
-        engine.getGameState().setInMenu(false);
+        engine.getGameState().setInActionMenu(false);
     }
 
     private void handleDirectionalInput(String direction) {
         GameState gameState = engine.getGameState();
         if (gameState.isInDialogue())
             return; // don't handle movement during dialogue
-        if (gameState.isInMenu()) {
+        if (gameState.isInActionMenu()) {
             List<GameAction> gameActions = engine.getCurrentActions();
             switch (direction) {
                 case "up":
