@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import com.jrpg.engine.*;
-import com.jrpg.rendering.*;
-import com.jrpg.rendering.graphics.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,23 +14,23 @@ public class Main {
         Font font = new Font("Serif", Font.PLAIN, 24);
         ArrayList<Scene> scenes = new ArrayList<Scene>();
 
-        GameAction nudgeLeft = new GameAction("Nudge Left", new DialogueLine("Nudges the current object left", Color.black, font), (Engine engine) -> {
+        GameAction nudgeLeft = new GameAction("Nudge Left", (Engine engine) -> {
             GameObject currentGameObject = engine.getGameInputHandler().getCurrentGameObject();
             currentGameObject.setPosition(currentGameObject.getPosition().add(-10, 0));
         });
-        GameAction nudgeRight = new GameAction("Nudge Right", new DialogueLine("Nudges the current object right", Color.black, font), (Engine engine) -> {
+        GameAction nudgeRight = new GameAction("Nudge Right", (Engine engine) -> {
             GameObject currentGameObject = engine.getGameInputHandler().getCurrentGameObject();
             currentGameObject.setPosition(currentGameObject.getPosition().add(10, 0));
         });
-        GameAction nudgeUp = new GameAction("Nudge Up", new DialogueLine("Nudges the current object up", Color.black, font), (Engine engine) -> {
+        GameAction nudgeUp = new GameAction("Nudge Up", (Engine engine) -> {
             GameObject currentGameObject = engine.getGameInputHandler().getCurrentGameObject();
             currentGameObject.setPosition(currentGameObject.getPosition().add(0, -10));
         });
-        GameAction nudgeDown = new GameAction("Nudge Down", new DialogueLine("Nudges the current object down", Color.black, font), (Engine engine) -> {
+        GameAction nudgeDown = new GameAction("Nudge Down", (Engine engine) -> {
             GameObject currentGameObject = engine.getGameInputHandler().getCurrentGameObject();
             currentGameObject.setPosition(currentGameObject.getPosition().add(0, 10));
         });
-        GameAction talk = new GameAction("Talk", new DialogueLine("Talks", Color.black, font), (Engine engine) -> {
+        GameAction talk = new GameAction("Talk", (Engine engine) -> {
             GameObject currentGameObject = engine.getCurrentSelectedGameObject();
             String name = currentGameObject.getSpriteName() == "testSprite1" ? "Shiroko" : "Sensei";
             engine.enqueueDialogue(Dialogue.fromString("Hello, My Name Is " + name + "\nGood night", Color.black, font));
@@ -86,7 +84,7 @@ public class Main {
             try {
                 Thread.sleep(Math.round(1000 / 60));
             } catch (InterruptedException e) {
-
+            
             }
         }
     }

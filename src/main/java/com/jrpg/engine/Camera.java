@@ -95,14 +95,16 @@ public class Camera {
         if (gameState.isInDialogue())
             dialogueLines = engine.getCurrentDialogue().getLines();
         else if (gameState.isInActionMenu()) {
-            dialogueLines = new ArrayList<DialogueLine>();
             GameAction currentAction = engine.getCurrentSelectedAction();
-            dialogueLines.add(currentAction.getDescription());
+            Dialogue description = currentAction.getDescription();
+            if(description == null) return; 
+            dialogueLines = description.getLines();
         } else {
-            // TODO: create dialogueLines for displaying the selected gameObject info
-            return;
+            GameObject currentGameObject = engine.getCurrentSelectedGameObject();
+            Dialogue description = currentGameObject.getDescription();
+            if(description == null) return;
+            dialogueLines = description.getLines();
         }
-        ;
 
         // render dialogue text
         int currentYOffset = dialogueBoxPaddingY;

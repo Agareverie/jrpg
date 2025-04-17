@@ -1,5 +1,7 @@
 package com.jrpg.engine;
 
+//TODO? make this into an enum and have the engine track it directly
+//since it doesn't matter if the menu is open or not when the game is paused and etc.
 public class GameState {
     private Engine engine;
     private boolean inActionMenu = false;

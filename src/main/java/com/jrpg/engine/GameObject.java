@@ -8,6 +8,7 @@ public class GameObject {
     private Vector2D dimensions;
     private String spriteName;
     private ArrayList<GameAction> gameActions;
+    private Dialogue description;
 
     public Vector2D getPosition() {
         return position;
@@ -35,6 +36,10 @@ public class GameObject {
 
     public ArrayList<GameAction> getGameActions() {
         return gameActions;
+    }
+
+    public Dialogue getDescription() {
+        return description;
     }
 
     public GameObject(Vector2D position, Vector2D dimensions, String spriteName){

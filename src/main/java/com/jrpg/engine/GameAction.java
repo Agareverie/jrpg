@@ -4,14 +4,14 @@ import java.util.function.Consumer;
 
 public class GameAction {
     private String name;
-    private DialogueLine description;
+    private Dialogue description;
     private Consumer<Engine> onRun;
 
     public String getName() {
         return name;
     }
 
-    public DialogueLine getDescription() {
+    public Dialogue getDescription() {
         return description;
     }
 
@@ -19,9 +19,8 @@ public class GameAction {
         return onRun;
     }
 
-    public GameAction(String name, DialogueLine description, Consumer<Engine> onRun){
+    public GameAction(String name, Consumer<Engine> onRun){
         this.name = name;
-        this.description = description;
         this.onRun = onRun;
     }
 }

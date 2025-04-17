@@ -4,11 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.AbstractMap.SimpleEntry;
 
-//TODO a more descriptive name
-//this class represents 1 line of dialogue in the camera's dialogue box
-//the line contains string-font pairs which are then draw horizontally in order by the camera
 //ps currently the camera's dialogue box does not support wrap around so text needs to be shorted accordingly
 public class DialogueLine {
 
