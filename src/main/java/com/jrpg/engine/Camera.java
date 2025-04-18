@@ -97,8 +97,10 @@ public class Camera {
     private void addGameObjects() {
 
         for (GameObject gameObject : engine.getCurrentSceneGameObjects()) {
+            String spriteName = gameObject.getSpriteName();
+            if(spriteName == null) continue;
             renderer.add(Sprite.centered(gameObject.getPosition().toCoordinate(),
-                    gameObject.getDimensions().toCoordinate(), SpriteLoader.getSprite(gameObject.getSpriteName())));
+                    gameObject.getDimensions().toCoordinate(), SpriteLoader.getSprite(spriteName)));
         }
     }
 
