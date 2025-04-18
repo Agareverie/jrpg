@@ -24,4 +24,8 @@ public class StyledText {
         this.font = font;
         this.color = color;
     }
+
+    public int getLength(){
+        return text.length();
+    }
 }

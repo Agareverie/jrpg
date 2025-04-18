@@ -64,6 +64,10 @@ public class Vector2D {
         return Math.sqrt(x*x + y*y);
     }
 
+    public Vector2D getNormalized(){
+        return this.scale(1/this.getLength());
+    }
+
     /**
      * toCoordinate
      * @return Coordinate instance with x and y rounded from the Vector's x and y

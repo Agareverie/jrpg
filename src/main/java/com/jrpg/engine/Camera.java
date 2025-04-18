@@ -2,9 +2,7 @@ package com.jrpg.engine;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.AbstractMap.SimpleEntry;
 
 import com.jrpg.rendering.*;
 import com.jrpg.rendering.graphics.Rectangle;
@@ -15,9 +13,14 @@ import com.jrpg.rendering.graphics.UnfilledRectangle;
 public class Camera {
     private Engine engine;
     private GraphicsRenderer renderer;
+    private Dialogue animatedDialogue;
 
     // TODO a settings class
     private Dimension dimensions = new Dimension(1200, 675);
+    private double animatedDialogueSpeed = 2;
+    private double cursorAnimationSpeed = 0.4;
+    private String gameObjectCursorSpriteName = "arrow";
+    private String actionsMenuCursorSpriteName = "arrow_right";
     private int dialogueBoxHeight = 200;
     private int dialogueBoxPaddingX = 5;
     private int dialogueBoxPaddingY = 5;
@@ -33,10 +36,28 @@ public class Camera {
 
     // for animations
     private double time = 0.;
+    private double animatedDialogueProgress = 0;
+
+    public void setAnimatedDialogue(Dialogue animatedDialogue) {
+        this.animatedDialogue = animatedDialogue;
+        this.animatedDialogueProgress = 0;
+    }
 
     Camera(Engine engine, JFrame frame) {
         this.engine = engine;
         renderer = new GraphicsRenderer(frame, dimensions);
+    }
+
+    public boolean isAnimatedDialogueFinished() {
+        if (animatedDialogue == null)
+            return true;
+        return this.animatedDialogueProgress >= animatedDialogue.getLength();
+    }
+
+    public void skipAnimatedDialogue() {
+        if (animatedDialogue == null)
+            return;
+        this.animatedDialogueProgress = animatedDialogue.getLength();
     }
 
     private void addBackground() {
@@ -46,15 +67,13 @@ public class Camera {
                 defaultBackgroundColor));
     }
 
-    private void addCursor() {
-        GameInputHandler gameInputHandler = engine.getGameInputHandler();
-        GameObject currentGameObject = gameInputHandler.getCurrentGameObject();
+    private void addGameObjectCursor() {
+        GameObject currentGameObject = engine.getCurrentSelectedGameObject();
 
-        if (currentGameObject != null && !engine.getGameState().isInActionMenu()) {
-            renderer.add(Sprite.centered(
-                    currentGameObject.getPosition().add(0, 50 + 10 * Math.sin(0.4 * time)).toCoordinate(),
-                    new Coordinate(50, 50), SpriteLoader.getSprite("arrow")));
-        }
+        renderer.add(Sprite.centered(
+                currentGameObject.getPosition().add(0, 50 + 10 * Math.sin(cursorAnimationSpeed * time)).toCoordinate(),
+                new Coordinate(50, 50), SpriteLoader.getSprite(gameObjectCursorSpriteName)));
+
     }
 
     private void addGameObjects() {
@@ -67,18 +86,20 @@ public class Camera {
     }
 
     private void addUIObjects() {
-        // bottom dialogue box
-        addDialogueBox();
+        GameState gameState = engine.getGameState();
+        addDialogue();
 
-        if (engine.getGameState().isInActionMenu()) {
+        if (gameState.isInActionMenu()) {
             addActionsMenu();
         }
 
-        addCursor();
+        else if (engine.getCurrentSelectedGameObject() != null && !gameState.isInDialogue()) {
+            addGameObjectCursor();
+        }
 
     }
 
-    private void addDialogueBox() {
+    private void addDialogue() {
         GameState gameState = engine.getGameState();
 
         // render the box
@@ -89,31 +110,65 @@ public class Camera {
         renderer.add(new UnfilledRectangle(dialogueBoxPosition.toCoordinate(),
                 dialogueBoxDimensions.toCoordinate(), 5, Color.black));
 
+        // if there is currently an animated dialogue in progress render that
+        if (animatedDialogue != null) {
+            addDialogueText(animatedDialogue, dialogueBoxPosition, (int) Math.round(animatedDialogueProgress));
+            animatedDialogueProgress += animatedDialogueSpeed;
+            return;
+        }
         // choose where to get the data to render the text from
-        // (from the current dialogue, from current menu item, from current gameObject)
-        List<DialogueLine> dialogueLines;
-        if (gameState.isInDialogue())
-            dialogueLines = engine.getCurrentDialogue().getLines();
-        else if (gameState.isInActionMenu()) {
+        // (from current menu item or from current gameObject)
+        Dialogue dialogue;
+        if (gameState.isInActionMenu()) {
             GameAction currentAction = engine.getCurrentSelectedGameAction();
             Dialogue description = currentAction.getDescription();
-            if(description == null) return; 
-            dialogueLines = description.getLines();
+            if (description == null)
+                return;
+            dialogue = description;
         } else {
             GameObject currentGameObject = engine.getCurrentSelectedGameObject();
             Dialogue description = currentGameObject.getDescription();
-            if(description == null) return;
-            dialogueLines = description.getLines();
+            if (description == null)
+                return;
+            dialogue = description;
         }
 
-        // render dialogue text
+        addDialogueText(dialogue, dialogueBoxPosition);
+
+    }
+
+    private void addDialogueText(Dialogue dialogue, Vector2D dialogueBoxPosition) {
+        addDialogueText(dialogue, dialogueBoxPosition, dialogue.getLength());
+    }
+
+    // im not sure what to name this
+    // renders (a part of) the text onto the screen
+    // works like subString(0, progress + 1)
+    private void addDialogueText(Dialogue dialogue, Vector2D dialogueBoxPosition, int progress) {
+        if (progress > dialogue.getLength()) {
+            progress = dialogue.getLength();
+        }
+
+        int drawnCount = 0;
         int currentYOffset = dialogueBoxPaddingY;
-        for (DialogueLine dialogueLine : dialogueLines) {
+        for (DialogueLine dialogueLine : dialogue.getLines()) {
             currentYOffset += dialogueLine.getMaxFontSize() + dialougeBoxLineSpacing;
             int currentXOffset = dialogueBoxPaddingX;
             for (StyledText textFragment : dialogueLine.getTextFragments()) {
                 String text = textFragment.getText();
+                int length = text.length();
                 Font font = textFragment.getFont();
+
+                // edge case for last string
+                if (length + drawnCount > progress) {
+                    String cuttedString = text.substring(0, progress - drawnCount);
+
+                    renderer.add(new Text(cuttedString,
+                            dialogueBoxPosition.add(currentXOffset, currentYOffset).toCoordinate(),
+                            textFragment.getColor(), font));
+                    return;
+                }
+
                 renderer.add(new Text(text, dialogueBoxPosition.add(currentXOffset, currentYOffset).toCoordinate(),
                         textFragment.getColor(), font));
 
@@ -121,6 +176,7 @@ public class Camera {
 
                 };
                 currentXOffset += metrics.getStringBounds(text, null).getWidth();
+                drawnCount += length;
             }
         }
     }
@@ -134,7 +190,8 @@ public class Camera {
 
         // render menu box
         Vector2D actionsBoxDimensions = new Vector2D(actionsMenuWidth,
-                (actionsMenuFont.getSize() + actionsMenuPaddingY) * actionsMenuMaxActionsPerPage + 2 * actionsMenuPaddingY);
+                (actionsMenuFont.getSize() + actionsMenuPaddingY) * actionsMenuMaxActionsPerPage
+                        + 2 * actionsMenuPaddingY);
         renderer.add(new Rectangle(actionsBoxPosition.toCoordinate(), actionsBoxDimensions.toCoordinate(),
                 actionsMenuColor));
         renderer.add(new UnfilledRectangle(actionsBoxPosition.toCoordinate(), actionsBoxDimensions.toCoordinate(), 2,
@@ -160,8 +217,9 @@ public class Camera {
             // draw cursor
             if (actualIndex == selectedIndex) {
                 renderer.add(Sprite.centered(
-                        position.add(-20 + 10 * Math.sin(0.4 * time), -font.getSize() / 4.).toCoordinate(),
-                        new Coordinate(50, 50), SpriteLoader.getSprite("arrow_right")));
+                        position.add(-20 + 10 * Math.sin(cursorAnimationSpeed * time), -font.getSize() / 4.)
+                                .toCoordinate(),
+                        new Coordinate(50, 50), SpriteLoader.getSprite(actionsMenuCursorSpriteName)));
             }
         }
     }

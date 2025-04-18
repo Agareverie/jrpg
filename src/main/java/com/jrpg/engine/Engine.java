@@ -84,14 +84,19 @@ public class Engine {
     public void enqueueDialogue(Dialogue dialogue){
         dialogueQueue.add(dialogue);
 
-        if(currentDialogue == null) currentDialogue = dialogueQueue.poll();
+        if(currentDialogue == null) finishDialogue();
     }
 
     //i need a better name for this
     //this function is supposed to be called when the player has acknowledged the current dialogue
     //and the next one in the queue needs to be displayed
     public void finishDialogue(){
-        currentDialogue = dialogueQueue.poll();
+        if(camera.isAnimatedDialogueFinished()){
+            currentDialogue = dialogueQueue.poll();
+            camera.setAnimatedDialogue(currentDialogue);
+        } else{
+            camera.skipAnimatedDialogue();
+        }
     }
 
     public void update(){

@@ -9,9 +9,14 @@ public class Dialogue {
     static Color defaultColor = Color.black;
     static Font defaultFont = new Font("Serif", Font.PLAIN, 20);
     private List<DialogueLine> lines = new ArrayList<DialogueLine>();
+    private int length;
 
     public List<DialogueLine> getLines() {
         return lines;
+    }
+
+    public int getLength() {
+        return length;
     }
 
     //for generating a dialogue with identical color and font for all the text fragments
@@ -28,5 +33,6 @@ public class Dialogue {
 
     public void addLine(DialogueLine line){
         this.lines.add(line);
+        this.length += line.getLength();
     }
 }

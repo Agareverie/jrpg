@@ -13,6 +13,7 @@ public class DialogueLine {
 
     //for vertical spacing
     private int maxFontSize = Integer.MIN_VALUE;
+    private int length = 0;
 
     public List<StyledText> getTextFragments() {
         return textFragments;
@@ -20,6 +21,10 @@ public class DialogueLine {
 
     public int getMaxFontSize() {
         return maxFontSize;
+    }
+
+    public int getLength() {
+        return length;
     }
 
     public DialogueLine(){}
@@ -38,6 +43,7 @@ public class DialogueLine {
     public void add(StyledText textFragment){
         int fontSize = textFragment.getFont().getSize();
         if(fontSize > maxFontSize) maxFontSize = fontSize;
+        this.length += textFragment.getText().length();
         this.textFragments.add(textFragment);
     }
 }
