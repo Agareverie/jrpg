@@ -12,7 +12,6 @@ public class Main {
         JFrame frame = new JFrame("JRPG");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Font font = new Font("Serif", Font.PLAIN, 24);
-        ArrayList<Scene> scenes = new ArrayList<Scene>();
 
         GameAction nudgeLeft = new GameAction("Nudge Left", (Engine engine) -> {
             GameObject currentGameObject = engine.getGameInputHandler().getCurrentGameObject();
@@ -61,9 +60,9 @@ public class Main {
             scene.add(gameObject);
         }
 
-        scenes.add(scene);
+        scene.setBackgroundImageSpriteName("testBackground");
 
-        Engine engine = new Engine(frame, scenes);
+        Engine engine = new Engine(frame, scene);
 
         DialogueLine testLine1 = new DialogueLine();
         testLine1.add("test1 ", Color.black, new Font("Serif", Font.PLAIN, 20));

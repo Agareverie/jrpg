@@ -75,10 +75,14 @@ public class Camera {
     }
 
     private void addBackground() {
-        // TODO attach background sprite to scenes
-        renderer.add(new Rectangle(new Coordinate(0, 0),
-                new Coordinate((int) dimensions.getWidth(), (int) dimensions.getHeight() - dialogueBoxHeight),
-                defaultBackgroundColor));
+        Scene currentScene = engine.getCurrentScene();
+
+        Vector2D backgroundDimensions = new Vector2D(dimensions.getWidth(), dimensions.getHeight() - dialogueBoxHeight);
+        if(currentScene.getBackgroundImageSpriteName() != null){
+            renderer.add(new Sprite(Vector2D.zero().toCoordinate(), backgroundDimensions.toCoordinate(), SpriteLoader.getSprite(currentScene.getBackgroundImageSpriteName())));
+        }else{
+            renderer.add(new Rectangle(Vector2D.zero().toCoordinate(), backgroundDimensions.toCoordinate(), defaultBackgroundColor));
+        }
     }
 
     private void addGameObjectCursor() {
