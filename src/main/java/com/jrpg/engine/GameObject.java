@@ -9,6 +9,7 @@ public class GameObject {
     private String spriteName;
     private ArrayList<GameAction> gameActions;
     private Dialogue description;
+    private boolean selectable = true;
 
     public Vector2D getPosition() {
         return position;
@@ -40,6 +41,14 @@ public class GameObject {
 
     public Dialogue getDescription() {
         return description;
+    }
+
+    public boolean isSelectable() {
+        return selectable;
+    }
+
+    public void setSelectable(boolean selectable) {
+        this.selectable = selectable;
     }
 
     public GameObject(Vector2D position, Vector2D dimensions, String spriteName){

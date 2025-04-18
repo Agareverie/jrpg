@@ -45,8 +45,12 @@ public class Engine {
         gameInputHandler = new GameInputHandler(this, frame);
     }
 
-    public ArrayList<GameObject> getCurrentSceneGameObjects(){
+    public List<GameObject> getCurrentSceneGameObjects(){
         return currentScene.getGameObjects();
+    }
+
+    public List<GameObject> getCurrentSceneSelectableGameObjects(){
+        return currentScene.getSelectableGameObjects();
     }
 
     public GameObject getCurrentSelectedGameObject(){

@@ -33,7 +33,7 @@ public class GameInputHandler {
      *         scene contains no gameObjects
      */
     public Integer getCurrentGameObjectIndex() {
-        ArrayList<GameObject> gameObjects = engine.getCurrentSceneGameObjects();
+        List<GameObject> gameObjects = engine.getCurrentSceneSelectableGameObjects();
         if (gameObjects.size() <= 0)
             return null;
 
@@ -53,7 +53,7 @@ public class GameInputHandler {
         Integer index = getCurrentGameObjectIndex();
         if (index == null)
             return null;
-        return engine.getCurrentSceneGameObjects().get(index);
+        return engine.getCurrentSceneSelectableGameObjects().get(index);
     }
 
     /**
@@ -149,7 +149,7 @@ public class GameInputHandler {
     // works by moving to the closest gameObject in the direction given
     // objects are selected from a cone
     private void handleObjectSelectionChange(String direction) {
-        ArrayList<GameObject> gameObjects = engine.getCurrentSceneGameObjects();
+        List<GameObject> gameObjects = engine.getCurrentSceneSelectableGameObjects();
         GameObject currentGameObject = getCurrentGameObject();
         Vector2D currentPosition = currentGameObject.getPosition();
 

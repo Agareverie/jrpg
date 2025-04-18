@@ -41,7 +41,10 @@ public class Main {
         for (int i = 0; i < 10; i++) {
             Vector2D position = new Vector2D(Math.floor(Math.random()* 1200 + 1), Math.floor(Math.random()* 475 + 1));
             GameObject gameObject = new GameObject(position, new Vector2D(70, 70), i % 2 == 0? "testSprite1" : "testSprite2");
-            gameObject.addGameAction(nudgeLeft);
+            
+            gameObject.setSelectable(Math.random() < .5);
+            if(gameObject.isSelectable()){
+                gameObject.addGameAction(nudgeLeft);
             gameObject.addGameAction(nudgeRight);
             gameObject.addGameAction(nudgeUp);
             gameObject.addGameAction(nudgeDown);
@@ -53,6 +56,8 @@ public class Main {
             gameObject.addGameAction(nudgeDown);
             gameObject.addGameAction(talk);
             }
+            }else gameObject.setSpriteName("default");
+
             scene.add(gameObject);
         }
 
