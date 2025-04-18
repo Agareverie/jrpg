@@ -85,13 +85,6 @@ public class Main {
         engine.enqueueDialogue(dialogue1);
         engine.enqueueDialogue(dialogue2);
 
-        while (true) {
-            engine.update();
-            try {
-                Thread.sleep(Math.round(1000 / 60));
-            } catch (InterruptedException e) {
-            
-            }
-        }
+        engine.loop();
     }
 }

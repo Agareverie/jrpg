@@ -11,7 +11,7 @@ public class Engine {
     private Scene currentScene;
     private Camera camera;
     private GameInputHandler gameInputHandler;
-    private List<Scene> scenes;
+    private List<Scene> scenes = new ArrayList<Scene>();
     private List<GameAction> generalGameActions = new ArrayList<GameAction>();
     private Queue<Dialogue> dialogueQueue = new LinkedList<Dialogue>();
     private Dialogue currentDialogue;
@@ -37,9 +37,8 @@ public class Engine {
         return currentDialogue;
     }
 
-    public Engine(JFrame frame, ArrayList<Scene> scenes){
-        this.scenes = scenes;
-        this.currentScene = scenes.get(0);
+    public Engine(JFrame frame, Scene initialScene){
+        this.currentScene = initialScene;
 
         camera = new Camera(this, frame);
         gameInputHandler = new GameInputHandler(this, frame);
@@ -103,8 +102,31 @@ public class Engine {
         }
     }
 
+    public void addScene(Scene scene){
+        if(scenes.contains(scene)) throw new RuntimeException("scene already added");
+
+        scenes.add(scene);
+    }
+
+    public void changeScenes(Scene scene){
+        if(!scenes.contains(scene)) addScene(scene);
+
+        currentScene = scene;
+    }
+
     public void update(){
         camera.update();
         gameInputHandler.update();
+    }
+
+    public void loop(){
+        while (true) {
+            update();
+            try {
+                Thread.sleep(Math.round(1000 / 60));
+            } catch (InterruptedException e) {
+                
+            }
+        }
     }
 }
