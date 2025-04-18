@@ -2,6 +2,7 @@ package com.jrpg.engine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.jrpg.rendering.*;
@@ -14,9 +15,14 @@ public class Camera {
     private Engine engine;
     private GraphicsRenderer renderer;
     private Dialogue animatedDialogue;
+    private List<GameAnimation> gameAnimations = new ArrayList<GameAnimation>();
 
     // TODO a settings class
     private Dimension dimensions = new Dimension(1200, 675);
+    
+    //speed of all animations (except for animated dialogue, which is controlled with a different timer)
+    private double globalAnimationSpeed = 1;
+    
     private double animatedDialogueSpeed = 2;
     private double cursorAnimationSpeed = 0.4;
     private String gameObjectCursorSpriteName = "arrow";
@@ -58,6 +64,14 @@ public class Camera {
         if (animatedDialogue == null)
             return;
         this.animatedDialogueProgress = animatedDialogue.getLength();
+    }
+
+    public void addGameAnimation(GameAnimation animation){
+        this.gameAnimations.add(animation);
+    }
+
+    public void removeGameAnimation(GameAnimation animation){
+        if(this.gameAnimations.contains(animation)) gameAnimations.remove(animation);
     }
 
     private void addBackground() {
@@ -223,8 +237,17 @@ public class Camera {
         }
     }
 
+    private void tickAnimations(){
+        for(GameAnimation gameAnimation : gameAnimations){
+            gameAnimation.tick(time);
+        }
+
+        gameAnimations.removeIf((gameAnimation) -> gameAnimation.isFinished());
+    }
     // main update loop
     public void update() {
+        tickAnimations();
+
         // clear old frame
         renderer.clear();
 
@@ -235,6 +258,6 @@ public class Camera {
         // draw new frame
         renderer.render();
 
-        time++;
+        time += globalAnimationSpeed;
     }
 }
