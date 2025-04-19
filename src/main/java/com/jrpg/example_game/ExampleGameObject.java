@@ -42,7 +42,7 @@ public class ExampleGameObject extends GameObject {
         this.health = health;
         this.baseStats = baseStats;
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>((gameEvent, engine)->{
+        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>(DeathEvent.class, (gameEvent, engine)->{
             engine.enqueueDialogue(Dialogue.fromString(name + " died"));
             setSelectable(false);
             setSpriteName(null);

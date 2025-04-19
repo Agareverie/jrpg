@@ -7,12 +7,16 @@ import com.jrpg.engine.Engine;
 //might move this system into the engine
 public class GameEventListener<T extends GameEvent> {
     private BiConsumer<T, Engine> callback;
+    private Class<T> eventType;
 
-    public GameEventListener(BiConsumer<T, Engine> callback){
+    public GameEventListener(Class<T> eventType, BiConsumer<T, Engine> callback){
+        this.eventType = eventType;
         this.callback = callback;
     }
 
-    public void notifyEvent(T gameEvent, Engine engine){
-        if(gameEvent instanceof T) callback.accept(gameEvent, engine);
+    public void notifyEvent(GameEvent gameEvent, Engine engine){
+        if(eventType.isInstance(gameEvent)) {
+            callback.accept((T) gameEvent, engine);
+        }
     }
 }
