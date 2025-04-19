@@ -8,7 +8,6 @@ import com.jrpg.example_game.events.SawAttackEvent;
 
 public class CombatManager {
     public static void initiateAttack(ExampleGameObject attacker, ExampleGameObject defender, Engine engine) {
-    public static void initiateAttack(ExampleGameObject attacker, ExampleGameObject defender, Engine engine) {
         ExampleScene currentScene = (ExampleScene) engine.getCurrentScene();
         GameStats attackerStats = attacker.getEffectiveStats();
         GameStats defenderStats = defender.getEffectiveStats();
@@ -26,24 +25,23 @@ public class CombatManager {
             defender.setHealth(health);
 
             if (health <= 0) {
-            if (health <= 0) {
                 defender.getGameEventListenerManager().notifyEvent(new DeathEvent(), engine);
-            } else {
             } else {
                 defender.getGameEventListenerManager().notifyEvent(new AttackedEvent(attacker), engine);
             }
-        } else {
         } else {
             engine.enqueueDialogue(Dialogue.fromString(attacker.getName() + " missed"));
         }
 
         currentScene.getGameObjects()
                 .stream()
+                .sequential()
                 .filter(gameObject -> gameObject instanceof ExampleGameObject)
                 .map(gameObject -> (ExampleGameObject) gameObject)
                 .filter(gameObject -> gameObject != defender)
                 .forEach(gameObject -> {
-                    gameObject.getGameEventListenerManager().notifyEvent(new SawAttackEvent(attacker, defender), engine);
+                    gameObject.getGameEventListenerManager().notifyEvent(new SawAttackEvent(attacker, defender),
+                            engine);
                 });
     }
 }

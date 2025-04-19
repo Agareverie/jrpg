@@ -23,7 +23,6 @@ public class ShrinkAndGrow implements GameAnimation {
     }
 
     public ShrinkAndGrow(GameObject gameObject, double speed, double factor) {
-    public ShrinkAndGrow(GameObject gameObject, double speed, double factor) {
         this.gameObject = gameObject;
         this.speed = speed;
         this.factor = factor;

@@ -1,6 +1,5 @@
 package com.jrpg.example_game;
 
-
 import com.jrpg.engine.components.*;
 import com.jrpg.engine.*;
 
@@ -17,13 +16,13 @@ public class ExampleScene extends Scene {
     }
 
     public ExampleScene(String name, String backgroundSpriteName) {
-    public ExampleScene(String name, String backgroundSpriteName) {
         this(name);
         setBackgroundImageSpriteName(backgroundSpriteName);
     }
 
     public void notifyEventToGameObjects(GameEvent gameEvent, Engine engine) {
         getGameObjects().stream()
+                .sequential()
                 .filter(gameObject -> gameObject instanceof ExampleGameObject)
                 .map(gameObject -> (ExampleGameObject) gameObject)
                 .forEach(gameObject -> {

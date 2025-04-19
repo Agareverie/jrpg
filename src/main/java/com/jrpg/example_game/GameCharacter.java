@@ -11,7 +11,6 @@ public class GameCharacter extends ExampleGameObject {
     }
 
     public GameCharacter(String name, int Health, GameStats baseStats) {
-    public GameCharacter(String name, int Health, GameStats baseStats) {
         super(name, Health, baseStats);
     }
 
