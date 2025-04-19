@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jrpg.engine.components.*;
+import com.jrpg.example_game.events.DeathEvent;
 
 //example of how you can extend the gameObject to fit any functionality the
 //game needs
@@ -41,7 +42,7 @@ public class ExampleGameObject extends GameObject {
         this.health = health;
         this.baseStats = baseStats;
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener("Death", (gameEvent, engine)->{
+        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>((gameEvent, engine)->{
             engine.enqueueDialogue(Dialogue.fromString(name + " died"));
             setSelectable(false);
             setSpriteName(null);

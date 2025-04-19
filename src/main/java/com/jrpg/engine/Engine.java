@@ -32,7 +32,7 @@ public class Engine {
         return camera;
     }
 
-    public GameState getGameState(){
+    public GameState getGameState() {
         return this.gameState;
     }
 
@@ -66,17 +66,17 @@ public class Engine {
     public List<GameAction> getCurrentGameActions() {
         GameObject currentGameObject = getCurrentSelectedGameObject();
         List<GameAction> gameActions = new ArrayList<GameAction>();
-        if(currentGameObject == null) return gameActions;
-        
+        if (currentGameObject == null)
+            return gameActions;
+
         // Add gameObject's actions
         Stream.concat(
                 currentGameObject.getGameActions().stream(),
-                generalGameActions.stream()
-        ).forEach(gameAction -> {
-            if (gameAction.getCondition().test(currentGameObject)) {
-                gameActions.add(gameAction);
-            }
-        });
+                generalGameActions.stream()).forEach(gameAction -> {
+                    if (gameAction.getCondition().test(currentGameObject)) {
+                        gameActions.add(gameAction);
+                    }   
+                });
 
         return gameActions;
     }
@@ -93,7 +93,7 @@ public class Engine {
         generalGameActions.remove(gameAction);
     }
 
-    public void enqueueDialogue(Dialogue dialogue){
+    public void enqueueDialogue(Dialogue dialogue) {
         dialogueQueue.add(dialogue);
 
         if (currentDialogue == null) {
@@ -137,7 +137,9 @@ public class Engine {
             update();
             try {
                 Thread.sleep(Math.round(1000.0f / 60.0f));
-            } catch (InterruptedException ignored) {};
+            } catch (InterruptedException ignored) {
+            }
+            ;
         }
     }
 }

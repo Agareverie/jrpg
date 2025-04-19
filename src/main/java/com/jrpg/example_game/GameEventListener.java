@@ -5,16 +5,14 @@ import java.util.function.BiConsumer;
 import com.jrpg.engine.Engine;
 
 //might move this system into the engine
-public class GameEventListener {
-    private String eventName;
-    private BiConsumer<GameEvent, Engine> callback;
+public class GameEventListener<T extends GameEvent> {
+    private BiConsumer<T, Engine> callback;
 
-    public GameEventListener(String eventName, BiConsumer<GameEvent, Engine> callback){
-        this.eventName = eventName;
+    public GameEventListener(BiConsumer<T, Engine> callback){
         this.callback = callback;
     }
 
-    public void notifyEvent(GameEvent gameEvent, Engine engine){
-        if(eventName.equals(gameEvent.getEventName())) callback.accept(gameEvent, engine);
+    public void notifyEvent(T gameEvent, Engine engine){
+        if(gameEvent instanceof T) callback.accept(gameEvent, engine);
     }
 }

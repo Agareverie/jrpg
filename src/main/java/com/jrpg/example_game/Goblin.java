@@ -2,6 +2,7 @@ package com.jrpg.example_game;
 
 import com.jrpg.engine.components.*;
 import com.jrpg.example_game.events.AttackedEvent;
+import com.jrpg.example_game.events.DeathEvent;
 import com.jrpg.example_game.events.SawAttackEvent;
 
 public class Goblin extends GameCharacter {
@@ -12,19 +13,19 @@ public class Goblin extends GameCharacter {
         setSpriteName("goblin");
         setDescription(Dialogue.fromString("Goblin"));
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener("SawAttack", (gameEvent, engine) -> {
-            ExampleGameObject attacker = ((SawAttackEvent) gameEvent).getAttacker();
+        getGameEventListenerManager().registerEventListener(new GameEventListener<SawAttackEvent>((sawAttackEvent, engine) -> {
+            ExampleGameObject attacker = sawAttackEvent.getAttacker();
             if(!(attacker instanceof Goblin)){
                 CombatManager.initiateAttack(this, attacker, engine);
             }
         }));
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener("Attacked", (gameEvent, engine) -> {
-            ExampleGameObject attacker = ((AttackedEvent) gameEvent).getAttacker();
+        getGameEventListenerManager().registerEventListener(new GameEventListener<AttackedEvent>((attackedEvent, engine) -> {
+            ExampleGameObject attacker = attackedEvent.getAttacker();
             CombatManager.initiateAttack(this, attacker, engine);
         }));
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener("Death", (gameEvent, engine) -> {
+        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>((gameEvent, engine) -> {
             engine.getCurrentScene().remove(this);
         }));
     }

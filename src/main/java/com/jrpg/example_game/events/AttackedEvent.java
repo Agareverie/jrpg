@@ -2,7 +2,7 @@ package com.jrpg.example_game.events;
 
 import com.jrpg.example_game.ExampleGameObject;
 import com.jrpg.example_game.GameEvent;
-public class AttackedEvent implements GameEvent {
+public class AttackedEvent extends GameEvent {
     private ExampleGameObject attacker;
 
     public ExampleGameObject getAttacker() {
@@ -11,9 +11,5 @@ public class AttackedEvent implements GameEvent {
     
     public AttackedEvent(ExampleGameObject attacker){
         this.attacker = attacker;
-    }
-    @Override
-    public String getEventName() {
-        return "Attacked";
     }
 }
