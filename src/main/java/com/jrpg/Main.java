@@ -43,19 +43,16 @@ public class Main {
 
             Dialogue currentDialogue = Dialogue.fromString("You have: ");
             int count = 1;
-            for(Item item : player.getItems()){
+            for (Item item : player.getItems()) {
                 currentDialogue.addLine(new DialogueLine(item.getName(), Color.black, Dialogue.getDefaultFont().deriveFont(Font.BOLD)));
                 count++;
-                if(count >= 8){
+                if (count >= 8) {
                     engine.enqueueDialogue(currentDialogue);
                     currentDialogue = new Dialogue();
                     count = 0;
                 }
             }
-            //edge case
-            if(count < 8){
-                engine.enqueueDialogue(currentDialogue);
-            }
+            engine.enqueueDialogue(currentDialogue);
         });
         player.addGameAction(inventoryAction);
         
@@ -79,14 +76,17 @@ public class Main {
             player.addItem(new Item("Sword", new GameStats(30, 0, 0, 0)));
             engine.enqueueDialogue(Dialogue.fromString("you bought a sword"));
         });
+
         GameAction buyShield = new GameAction("Buy Shield", (engine) -> {
             player.addItem(new Item("Shield", new GameStats(0, 30, 0, 0)));
             engine.enqueueDialogue(Dialogue.fromString("you bought a shield"));
         });
+
         GameAction buyGlasses = new GameAction("Buy Glasses", (engine) -> {
             player.addItem(new Item("Glasses", new GameStats(0, 0, 30, 0)));
             engine.enqueueDialogue(Dialogue.fromString("you bought a pair of glasses"));
         });
+
         GameAction buyBoots = new GameAction("Buy Boots", (engine) -> {
             player.addItem(new Item("Boots", new GameStats(0, 0, 0, 30)));
             engine.enqueueDialogue(Dialogue.fromString("you bought some boots"));
@@ -116,12 +116,12 @@ public class Main {
         weaponRack.setDimensions(new Vector2D(400, 400));
 
         ExampleGameObject box = new ExampleGameObject("Box", 25, new GameStats(0, 10, 0, -40));
-        box.setDescription(Dialogue.fromString("Box\nseems to be in bad condtion"));
+        box.setDescription(Dialogue.fromString("Box\nseems to be in bad condition"));
         box.setSpriteName("box");
         box.setPosition(new Vector2D(100, 350));
         box.setDimensions(new Vector2D(400, 400));
 
-        //teleporter
+        // Teleporter
         Teleporter door = new Teleporter(new Vector2D(900, 150), new Vector2D(400, 400), "door");
         door.setDescription(Dialogue.fromString("Door"));
         door.addDestination(weaponsShop);
@@ -142,7 +142,7 @@ public class Main {
         forest.add(door);
 
         //animation demonstration
-        //i left it pretty open so you should beable to control it however you want
+        //i left it pretty open so you should be able to control it however you want
         //but it's basically just a timer that is allowed to control anything (which it's supposed to control animations)
         //you could have it make a game object rapidly change sprites to create animations and stuff like that
         GameObject animationTarget = new GameObject(new Vector2D(300, 300), new Vector2D(400,400), "testSprite1");
@@ -162,15 +162,13 @@ public class Main {
         animationDemonstration.add(animationTarget);
         animationDemonstration.add(door);
 
-        
-
-        //example conditional action
+        // example conditional action
         GameAction attack = new GameAction("Attack", (engine) -> {
             CombatManager.initiateAttack((ExampleGameObject) player, (ExampleGameObject) engine.getCurrentSelectedGameObject(), engine);
-        }, (gameObject) -> {
-            if(!(gameObject instanceof ExampleGameObject)) return false;
-            ExampleGameObject exampleGameObject = (ExampleGameObject) gameObject;
-            
+            }, (gameObject) -> {
+            if(!(gameObject instanceof ExampleGameObject exampleGameObject)) {
+                return false;
+            }
             return !exampleGameObject.hasTag("Not Attackable");
         });
 

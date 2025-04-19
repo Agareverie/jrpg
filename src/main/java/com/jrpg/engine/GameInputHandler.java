@@ -13,12 +13,12 @@ import java.util.function.Predicate;
 import javax.swing.JFrame;
 
 public class GameInputHandler {
-    private Engine engine;
-    private Queue<KeyEvent> unhandledEventsQueue;
+    private final Engine engine;
+    private final Queue<KeyEvent> unhandledEventsQueue;
 
     // first one is objects in current scene
     // second one is actions in menus
-    private int[] selectionIndexes = { 0, 0 };
+    private final int[] selectionIndexes = { 0, 0 };
 
     public Queue<KeyEvent> getUnhandledEventsQueue() {
         return unhandledEventsQueue;
@@ -37,8 +37,9 @@ public class GameInputHandler {
      */
     public Integer getCurrentGameObjectIndex() {
         List<GameObject> gameObjects = engine.getCurrentSceneSelectableGameObjects();
-        if (gameObjects.size() <= 0)
+        if (gameObjects.isEmpty()) {
             return null;
+        }
 
         // for scene changes
         if (selectionIndexes[0] < 0 || selectionIndexes[0] >= gameObjects.size())
@@ -65,20 +66,27 @@ public class GameInputHandler {
      *         currently no menu open
      */
     public Integer getCurrentGameActionIndex() {
-        if (!engine.getGameState().isInActionMenu())
+        if (!engine.getGameState().isInActionMenu()) {
             return null;
+        }
 
         List<GameAction> gameActions = engine.getCurrentGameActions();
         int index = selectionIndexes[1];
 
-        if(gameActions.size() == 0) return null;
+        if (gameActions.isEmpty()) {
+            return null;
+        }
 
-        // so that the menu index appear in approximately the same location whenever the
+        // So that the menu index appear in approximately the same location whenever the
         // menu is opened
-        if (index >= gameActions.size())
+        if (index >= gameActions.size()) {
             index = gameActions.size() - 1;
-        if (index < 0)
+        }
+
+        if (index < 0) {
             index = 0;
+        }
+
         selectionIndexes[1] = index;
 
         return selectionIndexes[1];
@@ -110,7 +118,6 @@ public class GameInputHandler {
                 break;
             case KeyEvent.VK_X:
                 handleCancel();
-
         }
     }
 
@@ -118,18 +125,24 @@ public class GameInputHandler {
         GameState gameState = engine.getGameState();
         if (gameState.isInDialogue()) {
             engine.toNextDialogue();
-        } else {
-            if (gameState.isInActionMenu()){
-                List<GameAction> gameActions = engine.getCurrentGameActions();
-                if(gameActions.size() == 0) return;
-                gameActions.get(selectionIndexes[1]).getOnRun().accept(engine);
-                gameState.setInActionMenu(false); 
-                
-            }
-            else if (engine.getCurrentGameActions().size() != 0){
-                gameState.setInActionMenu(true); 
-            }
+            return;
         }
+
+        if (gameState.isInActionMenu()) {
+            List<GameAction> gameActions = engine.getCurrentGameActions();
+            if (gameActions.isEmpty()) {
+                return;
+            }
+            gameActions.get(selectionIndexes[1]).getOnRun().accept(engine);
+            gameState.setInActionMenu(false);
+            return;
+        }
+
+        if (engine.getCurrentGameActions().isEmpty()) {
+            return;
+        }
+
+        gameState.setInActionMenu(true);
     }
 
     private void handleCancel() {
@@ -162,7 +175,9 @@ public class GameInputHandler {
     // objects are selected from a cone
     private void handleObjectSelectionChange(String direction) {
         List<GameObject> gameObjects = engine.getCurrentSceneSelectableGameObjects();
-        if(gameObjects.size() == 0) return;
+        if (gameObjects.isEmpty()) {
+            return;
+        }
         GameObject currentGameObject = getCurrentGameObject();
         Vector2D currentPosition = currentGameObject.getPosition();
 

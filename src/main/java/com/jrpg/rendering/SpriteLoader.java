@@ -1,6 +1,7 @@
 package com.jrpg.rendering;
 
 import java.awt.*;
+import java.io.IOException;
 import java.net.*;
 import java.nio.file.*;
 import java.util.*;
@@ -39,7 +40,7 @@ public class SpriteLoader {
 
             Image sprite;
             try {
-                sprite = ImageIO.read(path.toFile());
+                sprite = ImageIO.read(Files.newInputStream(path));
                 sprites.put(spriteName, sprite);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -63,12 +64,26 @@ public class SpriteLoader {
         return sprites.get(defaultSpriteName);
     }
 
-    private static Stream<Path> loadSpritesFolder(){
-        URL spritesUrl = SpriteLoader.class.getResource("/sprites");
-
+    @SuppressWarnings("resource")
+    private static Stream<Path> loadSpritesFolder() {
         try {
+            URL spritesUrl = SpriteLoader.class.getResource("/sprites");
             Objects.requireNonNull(spritesUrl, "Sprites folder not found");
-            return Files.walk(Path.of(spritesUrl.toURI()));
+            URI uri = spritesUrl.toURI();
+
+            if ("jar".equals(uri.getScheme())) {
+                FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());
+                Path pathInJar = fs.getPath("/sprites");
+                return Files.walk(pathInJar)
+                            .onClose(() -> {
+                                try {
+                                    fs.close();
+                                } catch (IOException ignored) {}
+                            });
+            } else {
+                // Regular file path (e.g., in IDE)
+                return Files.walk(Path.of(uri));
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
