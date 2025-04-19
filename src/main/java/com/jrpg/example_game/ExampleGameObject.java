@@ -3,9 +3,7 @@ package com.jrpg.example_game;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jrpg.engine.Dialogue;
-import com.jrpg.engine.GameObject;
-import com.jrpg.engine.Vector2D;
+import com.jrpg.engine.components.*;
 
 //example of how you can extend the gameObject to fit any functionality the
 //game needs

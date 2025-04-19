@@ -1,4 +1,4 @@
-package com.jrpg.engine;
+package com.jrpg.engine.components;
 
 public interface GameAnimation {
     boolean isFinished();

@@ -1,10 +1,10 @@
-package com.jrpg.engine;
+package com.jrpg.engine.components;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Scene {
-    private List<GameObject> gameObjects = new ArrayList<GameObject>();
+    private final List<GameObject> gameObjects = new ArrayList<GameObject>();
     private String backgroundImageSpriteName;
 
     public List<GameObject> getGameObjects() {
@@ -19,12 +19,14 @@ public class Scene {
         this.backgroundImageSpriteName = backgroundImageSpriteName;
     }
 
-    public void add(GameObject gameObject){
+    public void add(GameObject gameObject) {
         this.gameObjects.add(gameObject);
     }
 
-    public void remove(GameObject gameObject){
-        if(!this.gameObjects.contains(gameObject)) return;
+    public void remove(GameObject gameObject) {
+        if (!this.gameObjects.contains(gameObject)) {
+            return;
+        }
 
         this.gameObjects.remove(gameObject);
     }

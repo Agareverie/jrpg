@@ -1,8 +1,6 @@
 package com.jrpg.example_game;
 
-import com.jrpg.engine.GameAction;
-import com.jrpg.engine.GameObject;
-import com.jrpg.engine.Vector2D;
+import com.jrpg.engine.components.*;
 
 public class Teleporter extends GameObject {
     public Teleporter(Vector2D position, Vector2D dimensions, String spriteName){

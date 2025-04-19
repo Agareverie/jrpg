@@ -10,18 +10,18 @@ import javax.imageio.ImageIO;
 
 public class SpriteLoader {
     private static String defaultSpriteName = "default";
-    private HashMap<String, Image> sprites;
+    private final HashMap<String, Image> sprites;
 
-    private static final class SingletonHolder{
+    private static final class SingletonHolder {
         public static final SpriteLoader INSTANCE = new SpriteLoader();
     }
 
-    public static SpriteLoader getInstance(){
+    public static SpriteLoader getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
-    private SpriteLoader(){
-        sprites = new HashMap<String, Image>();
+    private SpriteLoader() {
+        sprites = new HashMap<>();
 
         Stream<Path> paths = loadSpritesFolder();
 
@@ -67,6 +67,7 @@ public class SpriteLoader {
         URL spritesUrl = SpriteLoader.class.getResource("/sprites");
 
         try {
+            Objects.requireNonNull(spritesUrl, "Sprites folder not found");
             return Files.walk(Path.of(spritesUrl.toURI()));
         } catch (Exception e) {
             throw new RuntimeException(e);

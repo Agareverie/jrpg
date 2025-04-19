@@ -1,4 +1,5 @@
 package com.jrpg.example_game;
+import com.jrpg.engine.components.*;
 import com.jrpg.engine.*;
 
 public class ExampleScene extends Scene {

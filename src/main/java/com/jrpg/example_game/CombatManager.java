@@ -1,8 +1,7 @@
 package com.jrpg.example_game;
 
-import com.jrpg.engine.Dialogue;
 import com.jrpg.engine.Engine;
-import com.jrpg.engine.GameObject;
+import com.jrpg.engine.components.*;
 import com.jrpg.example_game.events.AttackedEvent;
 import com.jrpg.example_game.events.DeathEvent;
 import com.jrpg.example_game.events.SawAttackEvent;

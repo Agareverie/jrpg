@@ -1,12 +1,11 @@
 package com.jrpg;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.*;
 
 import com.jrpg.engine.*;
+import com.jrpg.engine.components.*;
 import com.jrpg.example_game.*;
 import com.jrpg.example_game.events.*;
 

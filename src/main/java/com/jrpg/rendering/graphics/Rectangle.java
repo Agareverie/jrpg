@@ -1,9 +1,9 @@
 package com.jrpg.rendering.graphics;
+
 import java.awt.*;
-
 import com.jrpg.rendering.Coordinate;
-public class Rectangle implements Drawable {
 
+public class Rectangle implements Drawable {
     protected Coordinate position;
     protected Coordinate dimensions;
     protected Color color;
@@ -12,7 +12,7 @@ public class Rectangle implements Drawable {
         return new Rectangle(Coordinate.toCentered(position, dimensions), dimensions, color);
     }
 
-    public Rectangle(Coordinate position, Coordinate dimensions, Color color){
+    public Rectangle(Coordinate position, Coordinate dimensions, Color color) {
         this.position = position;
         this.dimensions = dimensions;
         this.color = color;

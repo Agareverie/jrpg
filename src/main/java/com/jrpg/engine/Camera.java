@@ -5,44 +5,29 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jrpg.engine.components.*;
+import com.jrpg.engine.settings.*;
 import com.jrpg.rendering.*;
 import com.jrpg.rendering.graphics.Rectangle;
 import com.jrpg.rendering.graphics.Sprite;
 import com.jrpg.rendering.graphics.Text;
-import com.jrpg.rendering.graphics.UnfilledRectangle;
+import com.jrpg.rendering.graphics.RectangleBorder;
 
 public class Camera {
-    private Engine engine;
-    private GraphicsRenderer renderer;
+    private final Engine engine;
+    private final GraphicsRenderer renderer;
     private Dialogue animatedDialogue;
-    private List<GameAnimation> gameAnimations = new ArrayList<GameAnimation>();
+    private final List<GameAnimation> gameAnimations = new ArrayList<>();
+    private final Dimension dimensions = Dimensions.DEFAULT;
 
-    // TODO a settings class
-    private Dimension dimensions = new Dimension(1200, 675);
-    
-    //speed of all animations (except for animated dialogue, which is controlled with a different timer)
-    private double globalAnimationSpeed = 1;
-    
-    private double animatedDialogueSpeed = 2;
-    private double cursorAnimationSpeed = 0.4;
-    private String gameObjectCursorSpriteName = "arrow";
-    private String actionsMenuCursorSpriteName = "arrow_right";
-    private int dialogueBoxHeight = 200;
-    private int dialogueBoxPaddingX = 5;
-    private int dialogueBoxPaddingY = 5;
-    private int dialougeBoxLineSpacing = 1;
-    private Font actionsMenuFont = new Font("Serif", Font.PLAIN, 20);
-    private int actionsMenuMaxActionsPerPage = 7; // max actions before switching pages (also determins height)
-    private int actionsMenuPaddingX = 3;
-    private int actionsMenuPaddingY = 3;
-    private int actionsMenuWidth = 300;
-    private Color dialogueBoxColor = new Color(.8f, .8f, 1.f);
-    private Color actionsMenuColor = new Color(.8f, .8f, 1.f, .8f);
-    private Color defaultBackgroundColor = Color.lightGray;
+    private final Color defaultBackgroundColor = Color.LIGHT_GRAY;
 
-    // for animations
-    private double time = 0.;
-    private double animatedDialogueProgress = 0;
+    // For animations
+    private double time = 0.0;
+    private double animatedDialogueProgress = 0.0;
+    private static final double globalAnimationSpeed = 1;
+    private static final double animatedDialogueSpeed = 2;
+    private final double cursorAnimationSpeed = 0.4;
 
     public void setAnimatedDialogue(Dialogue animatedDialogue) {
         this.animatedDialogue = animatedDialogue;
@@ -71,18 +56,25 @@ public class Camera {
     }
 
     public void removeGameAnimation(GameAnimation animation){
-        if(this.gameAnimations.contains(animation)) gameAnimations.remove(animation);
+        if (this.gameAnimations.contains(animation)) {
+            gameAnimations.remove(animation);
+        }
     }
 
     private void addBackground() {
         Scene currentScene = engine.getCurrentScene();
+        Vector2D backgroundDimensions = new Vector2D(dimensions.getWidth(), dimensions.getHeight() - DialogueBoxSettings.HEIGHT);
 
-        Vector2D backgroundDimensions = new Vector2D(dimensions.getWidth(), dimensions.getHeight() - dialogueBoxHeight);
-        if(currentScene.getBackgroundImageSpriteName() != null){
-            renderer.add(new Sprite(Vector2D.zero().toCoordinate(), backgroundDimensions.toCoordinate(), SpriteLoader.getSprite(currentScene.getBackgroundImageSpriteName())));
-        }else{
+        if (currentScene.getBackgroundImageSpriteName() == null) {
             renderer.add(new Rectangle(Vector2D.zero().toCoordinate(), backgroundDimensions.toCoordinate(), defaultBackgroundColor));
+            return;
         }
+
+        renderer.add(new Sprite(
+                Vector2D.zero().toCoordinate(),
+                backgroundDimensions.toCoordinate(),
+                SpriteLoader.getSprite(currentScene.getBackgroundImageSpriteName())
+        ));
     }
 
     private void addGameObjectCursor() {
@@ -90,17 +82,20 @@ public class Camera {
 
         renderer.add(Sprite.centered(
                 currentGameObject.getPosition().add(0, 50 + 10 * Math.sin(cursorAnimationSpeed * time)).toCoordinate(),
-                new Coordinate(50, 50), SpriteLoader.getSprite(gameObjectCursorSpriteName)));
-
+                new Coordinate(50, 50), SpriteLoader.getSprite(SpriteNames.GAME_OBJECT_CURSOR)));
     }
 
     private void addGameObjects() {
 
         for (GameObject gameObject : engine.getCurrentSceneGameObjects()) {
             String spriteName = gameObject.getSpriteName();
-            if(spriteName == null) continue;
-            renderer.add(Sprite.centered(gameObject.getPosition().toCoordinate(),
-                    gameObject.getDimensions().toCoordinate(), SpriteLoader.getSprite(spriteName)));
+            if(spriteName == null) {
+                continue;
+            }
+            renderer.add(Sprite.centered(
+                    gameObject.getPosition().toCoordinate(),
+                    gameObject.getDimensions().toCoordinate(), SpriteLoader.getSprite(spriteName))
+            );
         }
     }
 
@@ -110,32 +105,40 @@ public class Camera {
 
         if (gameState.isInActionMenu()) {
             addActionsMenu();
+            return;
         }
 
-        else if (engine.getCurrentSelectedGameObject() != null && !gameState.isInDialogue()) {
+        if (engine.getCurrentSelectedGameObject() != null && !gameState.isInDialogue()) {
             addGameObjectCursor();
         }
-
     }
 
     private void addDialogue() {
         GameState gameState = engine.getGameState();
 
         // render the box
-        Vector2D dialogueBoxPosition = new Vector2D(0, this.dimensions.getHeight() - this.dialogueBoxHeight);
-        Vector2D dialogueBoxDimensions = new Vector2D(this.dimensions.getWidth(), dialogueBoxHeight);
-        renderer.add(new Rectangle(dialogueBoxPosition.toCoordinate(), dialogueBoxDimensions.toCoordinate(),
-                dialogueBoxColor));
-        renderer.add(new UnfilledRectangle(dialogueBoxPosition.toCoordinate(),
-                dialogueBoxDimensions.toCoordinate(), 5, Color.black));
+        Vector2D dialogueBoxPosition = new Vector2D(0, this.dimensions.getHeight() - DialogueBoxSettings.HEIGHT);
+        Vector2D dialogueBoxDimensions = new Vector2D(this.dimensions.getWidth(), DialogueBoxSettings.HEIGHT);
+        renderer.add(new Rectangle(
+                dialogueBoxPosition.toCoordinate(),
+                dialogueBoxDimensions.toCoordinate(),
+                DialogueBoxSettings.COLOR)
+        );
 
-        // if there is currently an animated dialogue in progress render that
+        renderer.add(new RectangleBorder(
+                dialogueBoxPosition.toCoordinate(),
+                dialogueBoxDimensions.toCoordinate(),
+                5, Color.BLACK)
+        );
+
+        // If there is currently an animated dialogue in progress render that
         if (animatedDialogue != null) {
-            addDialogueText(animatedDialogue, dialogueBoxPosition, (int) Math.round(animatedDialogueProgress));
+            addPartialDialogueText(animatedDialogue, dialogueBoxPosition, (int) Math.round(animatedDialogueProgress));
             animatedDialogueProgress += animatedDialogueSpeed;
             return;
         }
-        // choose where to get the data to render the text from
+
+        // Choose where to get the data to render the text from
         // (from current menu item or from current gameObject)
         Dialogue dialogue;
         if (gameState.isInActionMenu()) {
@@ -155,48 +158,48 @@ public class Camera {
         }
 
         addDialogueText(dialogue, dialogueBoxPosition);
-
     }
 
     private void addDialogueText(Dialogue dialogue, Vector2D dialogueBoxPosition) {
-        addDialogueText(dialogue, dialogueBoxPosition, dialogue.getLength());
+        addPartialDialogueText(dialogue, dialogueBoxPosition, dialogue.getLength());
     }
 
-    // im not sure what to name this
-    // renders (a part of) the text onto the screen
-    // works like subString(0, progress + 1)
-    private void addDialogueText(Dialogue dialogue, Vector2D dialogueBoxPosition, int progress) {
+    private void addPartialDialogueText(Dialogue dialogue, Vector2D dialogueBoxPosition, int progress) {
         if (progress > dialogue.getLength()) {
             progress = dialogue.getLength();
         }
 
         int drawnCount = 0;
-        int currentYOffset = dialogueBoxPaddingY;
+        int currentYOffset = DialogueBoxSettings.PADDING_Y;
         for (DialogueLine dialogueLine : dialogue.getLines()) {
-            currentYOffset += dialogueLine.getMaxFontSize() + dialougeBoxLineSpacing;
-            int currentXOffset = dialogueBoxPaddingX;
+            currentYOffset += dialogueLine.getMaxFontSize() + DialogueBoxSettings.LINE_SPACING;
+            int currentXOffset = DialogueBoxSettings.PADDING_X;
             for (StyledText textFragment : dialogueLine.getTextFragments()) {
-                String text = textFragment.getText();
+                String text = textFragment.text();
                 int length = text.length();
-                Font font = textFragment.getFont();
+                Font font = textFragment.font();
 
                 // edge case for last string
                 if (length + drawnCount > progress) {
-                    String cuttedString = text.substring(0, progress - drawnCount);
+                    String cutString = text.substring(0, progress - drawnCount);
 
-                    renderer.add(new Text(cuttedString,
+                    renderer.add(new Text(
+                            cutString,
                             dialogueBoxPosition.add(currentXOffset, currentYOffset).toCoordinate(),
-                            textFragment.getColor(), font));
+                            textFragment.color(), font)
+                    );
                     return;
                 }
 
-                renderer.add(new Text(text, dialogueBoxPosition.add(currentXOffset, currentYOffset).toCoordinate(),
-                        textFragment.getColor(), font));
+                renderer.add(new Text(
+                        text,
+                        dialogueBoxPosition.add(currentXOffset, currentYOffset).toCoordinate(),
+                        textFragment.color(),
+                        font
+                ));
 
-                FontMetrics metrics = new FontMetrics(font) {
-
-                };
-                currentXOffset += metrics.getStringBounds(text, null).getWidth();
+                FontMetrics metrics = new FontMetrics(font) {};
+                currentXOffset += (int) metrics.getStringBounds(text, null).getWidth();
                 drawnCount += length;
             }
         }
@@ -210,47 +213,58 @@ public class Camera {
                 : currentGameObject.getPosition();
 
         // render menu box
-        Vector2D actionsBoxDimensions = new Vector2D(actionsMenuWidth,
-                (actionsMenuFont.getSize() + actionsMenuPaddingY) * actionsMenuMaxActionsPerPage
-                        + 2 * actionsMenuPaddingY);
-        renderer.add(new Rectangle(actionsBoxPosition.toCoordinate(), actionsBoxDimensions.toCoordinate(),
-                actionsMenuColor));
-        renderer.add(new UnfilledRectangle(actionsBoxPosition.toCoordinate(), actionsBoxDimensions.toCoordinate(), 2,
-                Color.black));
+        float heightValue = (ActionsMenuSettings.FONT.getSize() + ActionsMenuSettings.PADDING_Y) * ActionsMenuSettings.MAX_ACTIONS_PER_PAGE + 2 * ActionsMenuSettings.PADDING_Y;
+        Vector2D actionsBoxDimensions = new Vector2D(ActionsMenuSettings.WIDTH, heightValue);
 
-        // add action names
-        Integer selectedIndex = gameInputHandler.getCurrentGameActionIndex();
+        renderer.add(new Rectangle(
+                actionsBoxPosition.toCoordinate(),
+                actionsBoxDimensions.toCoordinate(),
+                ActionsMenuSettings.COLOR)
+        );
+
+        renderer.add(new RectangleBorder(
+                actionsBoxPosition.toCoordinate(),
+                actionsBoxDimensions.toCoordinate(),
+                2,
+                Color.BLACK)
+        );
+
+        // Add action names
+        int selectedIndex = gameInputHandler.getCurrentGameActionIndex();
         List<GameAction> gameActions = engine.getCurrentGameActions();
 
         int currentYOffset = 0;
-        // pages
-        int pageOffset = actionsMenuMaxActionsPerPage * Math.floorDiv(selectedIndex, actionsMenuMaxActionsPerPage);
-        int currentPageActionsCount = Math.clamp(gameActions.size() - pageOffset, 0, actionsMenuMaxActionsPerPage);
-        for (int i = 0; i < currentPageActionsCount; i++) {
-            currentYOffset += actionsMenuFont.getSize() + actionsMenuPaddingY;
 
-            Vector2D position = actionsBoxPosition.add(actionsMenuPaddingX, currentYOffset);
+        // Pages
+        int pageOffset = ActionsMenuSettings.MAX_ACTIONS_PER_PAGE * Math.floorDiv(selectedIndex, ActionsMenuSettings.MAX_ACTIONS_PER_PAGE);
+        int currentPageActionsCount = Math.clamp(gameActions.size() - pageOffset, 0, ActionsMenuSettings.MAX_ACTIONS_PER_PAGE);
+
+        for (int i = 0; i < currentPageActionsCount; i++) {
+            currentYOffset += ActionsMenuSettings.FONT.getSize() + ActionsMenuSettings.PADDING_Y;
+
+            Vector2D position = actionsBoxPosition.add(ActionsMenuSettings.PADDING_X, currentYOffset);
             int actualIndex = pageOffset + i;
             GameAction gameAction = gameActions.get(actualIndex);
-            Font font = actionsMenuFont.deriveFont(actualIndex == selectedIndex ? Font.BOLD : Font.PLAIN);
+            Font font = ActionsMenuSettings.FONT.deriveFont(actualIndex == selectedIndex ? Font.BOLD : Font.PLAIN);
             renderer.add(new Text(gameAction.getName(), position.toCoordinate(), Color.black, font));
 
-            // draw cursor
+            // Draw cursor
             if (actualIndex == selectedIndex) {
                 renderer.add(Sprite.centered(
-                        position.add(-20 + 10 * Math.sin(cursorAnimationSpeed * time), -font.getSize() / 4.)
-                                .toCoordinate(),
-                        new Coordinate(50, 50), SpriteLoader.getSprite(actionsMenuCursorSpriteName)));
+                        position.add(-20 + 10 * Math.sin(cursorAnimationSpeed * time), -font.getSize() / 4.).toCoordinate(),
+                        new Coordinate(50, 50),
+                        SpriteLoader.getSprite(SpriteNames.ACTIONS_MENU_CURSOR)
+                ));
             }
         }
     }
 
-    private void tickAnimations(){
-        for(GameAnimation gameAnimation : gameAnimations){
+    private void tickAnimations() {
+        for (GameAnimation gameAnimation : gameAnimations) {
             gameAnimation.tick(time);
         }
 
-        gameAnimations.removeIf((gameAnimation) -> gameAnimation.isFinished());
+        gameAnimations.removeIf(GameAnimation::isFinished);
     }
 
     public void clearAnimations(){
@@ -260,14 +274,14 @@ public class Camera {
     public void update() {
         tickAnimations();
 
-        // clear old frame
+        // Clear old frame
         renderer.clear();
 
         addBackground();
         addGameObjects();
         addUIObjects();
 
-        // draw new frame
+        // Draw new frame
         renderer.render();
 
         time += globalAnimationSpeed;

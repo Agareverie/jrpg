@@ -1,8 +1,6 @@
 package com.jrpg.example_game;
 
-import com.jrpg.engine.GameAnimation;
-import com.jrpg.engine.GameObject;
-import com.jrpg.engine.Vector2D;
+import com.jrpg.engine.components.*;
 
 //animation system demonstration
 public class ShrinkAndGrow implements GameAnimation {

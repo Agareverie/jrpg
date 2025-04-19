@@ -1,7 +1,6 @@
 package com.jrpg.example_game;
 
-import com.jrpg.engine.Dialogue;
-import com.jrpg.engine.Vector2D;
+import com.jrpg.engine.components.*;
 import com.jrpg.example_game.events.AttackedEvent;
 import com.jrpg.example_game.events.SawAttackEvent;
 

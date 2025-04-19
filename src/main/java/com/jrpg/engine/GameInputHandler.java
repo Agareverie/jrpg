@@ -1,8 +1,11 @@
 package com.jrpg.engine;
 
+import com.jrpg.engine.components.GameAction;
+import com.jrpg.engine.components.GameObject;
+import com.jrpg.engine.components.Vector2D;
+
 import java.awt.event.*;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.function.Predicate;
@@ -114,7 +117,7 @@ public class GameInputHandler {
     private void handleConfirm() {
         GameState gameState = engine.getGameState();
         if (gameState.isInDialogue()) {
-            engine.finishDialogue();
+            engine.toNextDialogue();
         } else {
             if (gameState.isInActionMenu()){
                 List<GameAction> gameActions = engine.getCurrentGameActions();

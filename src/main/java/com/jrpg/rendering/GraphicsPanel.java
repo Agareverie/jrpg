@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 class GraphicsPanel extends JPanel {
-    private CopyOnWriteArrayList<Drawable> drawables;
+    private final CopyOnWriteArrayList<Drawable> drawables;
 
     public GraphicsPanel(CopyOnWriteArrayList<Drawable> drawables) {
         super();
