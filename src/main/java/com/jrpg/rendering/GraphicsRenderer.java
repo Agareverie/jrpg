@@ -9,8 +9,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class GraphicsRenderer {
-    private JFrame frame;
-    private CopyOnWriteArrayList<Drawable> drawables = new CopyOnWriteArrayList<Drawable>();
+    private final JFrame frame;
+    private final CopyOnWriteArrayList<Drawable> drawables = new CopyOnWriteArrayList<>();
+
     public GraphicsRenderer(JFrame frame, Dimension dimensions) {
         this.frame = frame;
         frame.setResizable(false);
