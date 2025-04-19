@@ -137,7 +137,7 @@ public class Engine {
             update();
             try {
                 Thread.sleep(Math.round(1000.0f / 60.0f));
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException ignored) {};
         }
     }
 }

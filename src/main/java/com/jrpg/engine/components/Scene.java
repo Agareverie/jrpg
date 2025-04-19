@@ -23,6 +23,7 @@ public class Scene {
         this.gameObjects.add(gameObject);
     }
 
+
     public void remove(GameObject gameObject) {
         if (!this.gameObjects.contains(gameObject)) {
             return;
