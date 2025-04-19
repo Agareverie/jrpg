@@ -19,11 +19,11 @@ public class Vector2D {
         this.y = y;
     }
 
-    static Vector2D zero(){
+    public static Vector2D zero(){
         return new Vector2D(0, 0);
     }
 
-    static double getDistance(Vector2D v0, Vector2D v1){
+    public static double getDistance(Vector2D v0, Vector2D v1){
         return v0.sub(v1).getLength();
     }
 

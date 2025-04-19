@@ -38,7 +38,7 @@ public class GameInputHandler {
             return null;
 
         // for scene changes
-        if (selectionIndexes[0] < 0 || selectionIndexes[0] > gameObjects.size())
+        if (selectionIndexes[0] < 0 || selectionIndexes[0] >= gameObjects.size())
             selectionIndexes[0] = 0;
 
         return selectionIndexes[0];
@@ -67,6 +67,8 @@ public class GameInputHandler {
 
         List<GameAction> gameActions = engine.getCurrentGameActions();
         int index = selectionIndexes[1];
+
+        if(gameActions.size() == 0) return null;
 
         // so that the menu index appear in approximately the same location whenever the
         // menu is opened
@@ -114,9 +116,16 @@ public class GameInputHandler {
         if (gameState.isInDialogue()) {
             engine.finishDialogue();
         } else {
-            if (gameState.isInActionMenu())
-                engine.getCurrentGameActions().get(selectionIndexes[1]).getOnRun().accept(engine);
-            gameState.setInActionMenu(!gameState.isInActionMenu());
+            if (gameState.isInActionMenu()){
+                List<GameAction> gameActions = engine.getCurrentGameActions();
+                if(gameActions.size() == 0) return;
+                gameActions.get(selectionIndexes[1]).getOnRun().accept(engine);
+                gameState.setInActionMenu(false); 
+                
+            }
+            else if (engine.getCurrentGameActions().size() != 0){
+                gameState.setInActionMenu(true); 
+            }
         }
     }
 
@@ -150,6 +159,7 @@ public class GameInputHandler {
     // objects are selected from a cone
     private void handleObjectSelectionChange(String direction) {
         List<GameObject> gameObjects = engine.getCurrentSceneSelectableGameObjects();
+        if(gameObjects.size() == 0) return;
         GameObject currentGameObject = getCurrentGameObject();
         Vector2D currentPosition = currentGameObject.getPosition();
 

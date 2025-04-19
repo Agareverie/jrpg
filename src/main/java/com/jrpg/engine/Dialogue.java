@@ -11,6 +11,14 @@ public class Dialogue {
     private List<DialogueLine> lines = new ArrayList<DialogueLine>();
     private int length;
 
+    public static Font getDefaultFont() {
+        return defaultFont;
+    }
+
+    public static Color getDefaultColor() {
+        return defaultColor;
+    }
+    
     public List<DialogueLine> getLines() {
         return lines;
     }
@@ -30,6 +38,15 @@ public class Dialogue {
 
         return dialogue;
     }
+
+    public static Dialogue fromString(String string, Color color){
+        return fromString(string, color, defaultFont);
+    }
+
+    public static Dialogue fromString(String string){
+        return fromString(string, defaultColor, defaultFont);
+    }
+
 
     public void addLine(DialogueLine line){
         this.lines.add(line);

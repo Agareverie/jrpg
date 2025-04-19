@@ -67,7 +67,7 @@ public class Camera {
     }
 
     public void addGameAnimation(GameAnimation animation){
-        this.gameAnimations.add(animation);
+        if(!this.gameAnimations.contains(animation)) this.gameAnimations.add(animation);
     }
 
     public void removeGameAnimation(GameAnimation animation){
@@ -146,6 +146,8 @@ public class Camera {
             dialogue = description;
         } else {
             GameObject currentGameObject = engine.getCurrentSelectedGameObject();
+            //empty scene
+            if(currentGameObject == null) return;
             Dialogue description = currentGameObject.getDescription();
             if (description == null)
                 return;
@@ -217,7 +219,7 @@ public class Camera {
                 Color.black));
 
         // add action names
-        int selectedIndex = gameInputHandler.getCurrentGameActionIndex();
+        Integer selectedIndex = gameInputHandler.getCurrentGameActionIndex();
         List<GameAction> gameActions = engine.getCurrentGameActions();
 
         int currentYOffset = 0;
@@ -249,6 +251,10 @@ public class Camera {
         }
 
         gameAnimations.removeIf((gameAnimation) -> gameAnimation.isFinished());
+    }
+
+    public void clearAnimations(){
+        gameAnimations.clear();
     }
     // main update loop
     public void update() {

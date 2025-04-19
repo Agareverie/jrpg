@@ -43,6 +43,10 @@ public class GameObject {
         return description;
     }
 
+    public void setDescription(Dialogue description) {
+        this.description = description;
+    }
+
     public boolean isSelectable() {
         return selectable;
     }

@@ -59,6 +59,7 @@ public class Engine {
     public List<GameAction> getCurrentGameActions(){
         GameObject currentGameObject = getCurrentSelectedGameObject();
         List<GameAction> gameActions = new ArrayList<GameAction>();
+        if(currentGameObject == null) return gameActions;
         
         //add gameObject's actions
         for(GameAction gameAction : currentGameObject.getGameActions()){
@@ -112,6 +113,7 @@ public class Engine {
         if(!scenes.contains(scene)) addScene(scene);
 
         currentScene = scene;
+        camera.clearAnimations();
     }
 
     public void update(){

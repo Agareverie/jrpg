@@ -5,15 +5,10 @@ import java.util.List;
 
 public class Scene {
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
-    private List<GameObject> selectableGameObjects = new ArrayList<GameObject>();
     private String backgroundImageSpriteName;
 
     public List<GameObject> getGameObjects() {
         return gameObjects;
-    }
-
-    public List<GameObject> getSelectableGameObjects(){
-        return selectableGameObjects;
     }
 
     public String getBackgroundImageSpriteName() {
@@ -26,13 +21,21 @@ public class Scene {
 
     public void add(GameObject gameObject){
         this.gameObjects.add(gameObject);
-        if(gameObject.isSelectable()) this.selectableGameObjects.add(gameObject);
     }
 
     public void remove(GameObject gameObject){
         if(!this.gameObjects.contains(gameObject)) return;
 
         this.gameObjects.remove(gameObject);
-        if(gameObject.isSelectable()) this.selectableGameObjects.remove(gameObject);
+    }
+
+    public List<GameObject> getSelectableGameObjects(){
+        List<GameObject> selectableGameObjects = new ArrayList<GameObject>();
+
+        for(GameObject gameObject : gameObjects){
+            if(gameObject.isSelectable()) selectableGameObjects.add(gameObject);
+        }
+
+        return selectableGameObjects;
     }
 }
