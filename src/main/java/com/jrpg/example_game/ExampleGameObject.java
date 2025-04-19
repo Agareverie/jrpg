@@ -3,6 +3,7 @@ package com.jrpg.example_game;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jrpg.engine.Engine;
 import com.jrpg.engine.components.*;
 import com.jrpg.example_game.events.DeathEvent;
 
@@ -42,11 +43,14 @@ public class ExampleGameObject extends GameObject {
         this.health = health;
         this.baseStats = baseStats;
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>((gameEvent, engine)->{
-            engine.enqueueDialogue(Dialogue.fromString(name + " died"));
-            setSelectable(false);
-            setSpriteName(null);
-        }));
+        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>(){
+            @Override
+            protected void run (DeathEvent deathEvent, Engine engine){
+                engine.enqueueDialogue(Dialogue.fromString(name + " died"));
+                setSelectable(false);
+                setSpriteName(null);
+            }
+        });
     }
 
     public GameStats getEffectiveStats(){

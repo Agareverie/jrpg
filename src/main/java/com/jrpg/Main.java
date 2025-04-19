@@ -29,14 +29,17 @@ public class Main {
         player.setDimensions(new Vector2D(100, 150));
         player.setSpriteName("testSprite2");
         player.addTag("Not Attackable");
-        player.getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>((gameEvent, engine)->{
-            engine.enqueueDialogue(Dialogue.fromString("You Lose"));
-            //in the actual game, the engine should instead switch to a lose scene
-            engine.getCurrentScene().getGameObjects().forEach((gameObject) -> {
-                gameObject.setSelectable(false);
-                gameObject.setSpriteName(null);
-            });
-        }));
+        player.getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>(){
+            @Override
+            protected void run(DeathEvent deathEvent, Engine engine){
+                engine.enqueueDialogue(Dialogue.fromString("You Lose"));
+                //in the actual game, the engine should instead switch to a lose scene
+                engine.getCurrentScene().getGameObjects().forEach((gameObject) -> {
+                    gameObject.setSelectable(false);
+                    gameObject.setSpriteName(null);
+                });
+            }
+        });
 
         //dialogue system demonstration
         GameAction inventoryAction = new GameAction("Inventory", (engine) -> {
@@ -63,13 +66,19 @@ public class Main {
         shopkeeper.setPosition(new Vector2D(700, 200));
         shopkeeper.setDimensions(new Vector2D(120, 180));
 
-        shopkeeper.getGameEventListenerManager().registerEventListener(new GameEventListener<SawAttackEvent>((gameEvent, engine) -> {
-            engine.enqueueDialogue(Dialogue.fromString("Shopkeeper:\nWhy are you attacking my " + (gameEvent.getDefender().getName())));
-        }));
+        shopkeeper.getGameEventListenerManager().registerEventListener(new GameEventListener<SawAttackEvent>(){
+            @Override
+            protected void run(SawAttackEvent sawAttackEvent, Engine engine){
+                engine.enqueueDialogue(Dialogue.fromString("Shopkeeper:\nWhy are you attacking my " + (sawAttackEvent.getDefender().getName())));
+            }
+        });
 
-        shopkeeper.getGameEventListenerManager().registerEventListener(new GameEventListener<AttackedEvent>((gameEvent, engine) -> {
+        shopkeeper.getGameEventListenerManager().registerEventListener(new GameEventListener<AttackedEvent>(){
+            @Override
+            protected void run(AttackedEvent attackedEvent, Engine engine){
             engine.enqueueDialogue(Dialogue.fromString("Shopkeeper:\nOuch!"));
-        }));
+            }
+        });
 
         //buy actions
         GameAction buySword = new GameAction("Buy Sword", (engine) -> {
