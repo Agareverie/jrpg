@@ -8,11 +8,12 @@ import com.jrpg.engine.Engine;
 public abstract class GameEventListener<T extends GameEvent> {
     @SuppressWarnings("unchecked")
     private Class<T> eventType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    protected abstract void run(T gameEvent, Engine engine); 
+
+    protected abstract void run(T gameEvent, Engine engine);
 
     @SuppressWarnings("unchecked")
-    public void notifyEvent(GameEvent gameEvent, Engine engine){
-        if(eventType.isInstance(gameEvent)) {
+    public void notifyEvent(GameEvent gameEvent, Engine engine) {
+        if (eventType.isInstance(gameEvent)) {
             run((T) gameEvent, engine);
         }
     }

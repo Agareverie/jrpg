@@ -37,31 +37,31 @@ public class ExampleGameObject extends GameObject {
         return gameEventListenerManager;
     }
 
-    public ExampleGameObject(String name, int health, GameStats baseStats){
+    public ExampleGameObject(String name, int health, GameStats baseStats) {
         super(Vector2D.zero(), Vector2D.zero(), null);
         this.name = name;
         this.health = health;
         this.baseStats = baseStats;
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>(){
+        ExampleGameObject thisExampleGameObject = this;
+        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>() {
             @Override
-            protected void run (DeathEvent deathEvent, Engine engine){
+            protected void run(DeathEvent deathEvent, Engine engine) {
                 engine.enqueueDialogue(Dialogue.fromString(name + " died"));
-                setSelectable(false);
-                setSpriteName(null);
+                engine.getCurrentScene().remove(thisExampleGameObject);
             }
         });
     }
 
-    public GameStats getEffectiveStats(){
+    public GameStats getEffectiveStats() {
         return baseStats;
     }
 
-    public void addTag(String tag){
+    public void addTag(String tag) {
         this.tags.add(tag);
     }
 
-    public boolean hasTag(String tag){
+    public boolean hasTag(String tag) {
         return this.tags.contains(tag);
     }
 }

@@ -15,15 +15,15 @@ public class ShrinkAndGrow implements GameAnimation {
         this.active = active;
     }
 
-    public ShrinkAndGrow(GameObject gameObject){
+    public ShrinkAndGrow(GameObject gameObject) {
         this(gameObject, 1, 0.1);
     }
-    
-    public ShrinkAndGrow(GameObject gameObject, double speed){
+
+    public ShrinkAndGrow(GameObject gameObject, double speed) {
         this(gameObject, speed, 0.1);
     }
 
-    public ShrinkAndGrow(GameObject gameObject, double speed, double factor){
+    public ShrinkAndGrow(GameObject gameObject, double speed, double factor) {
         this.gameObject = gameObject;
         this.speed = speed;
         this.factor = 0.1;
@@ -32,7 +32,7 @@ public class ShrinkAndGrow implements GameAnimation {
 
     @Override
     public void tick(double time) {
-        gameObject.setDimensions(originalSize.scale(1 + (factor*Math.sin(time*speed))));
+        gameObject.setDimensions(originalSize.scale(1 + (factor * Math.sin(time * speed))));
     }
 
     @Override

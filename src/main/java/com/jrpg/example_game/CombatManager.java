@@ -7,8 +7,7 @@ import com.jrpg.example_game.events.DeathEvent;
 import com.jrpg.example_game.events.SawAttackEvent;
 
 public class CombatManager {
-    public static void initiateAttack(ExampleGameObject attacker, ExampleGameObject defender, Engine engine)
-    {
+    public static void initiateAttack(ExampleGameObject attacker, ExampleGameObject defender, Engine engine) {
         ExampleScene currentScene = (ExampleScene) engine.getCurrentScene();
         GameStats attackerStats = attacker.getEffectiveStats();
         GameStats defenderStats = defender.getEffectiveStats();
@@ -17,26 +16,30 @@ public class CombatManager {
         int effectiveAccuracy = Math.max(0, attackerStats.accuracy() - defenderStats.evasion());
 
         engine.enqueueDialogue(Dialogue.fromString(attacker.getName() + " attacks " + defender.getName()));
-        if(Random.randomChance((double)effectiveAccuracy / 100.)){
+        if (Random.randomChance((double) effectiveAccuracy / 100.)) {
             int health = defender.getHealth();
             health -= effectiveAttack;
-            engine.enqueueDialogue(Dialogue.fromString(attacker.getName() + " hits " + defender.getName() + " for " + effectiveAttack + " damage"));
-            
+            engine.enqueueDialogue(Dialogue.fromString(
+                    attacker.getName() + " hits " + defender.getName() + " for " + effectiveAttack + " damage"));
+
             defender.setHealth(health);
 
-            if(health <= 0){
+            if (health <= 0) {
                 defender.getGameEventListenerManager().notifyEvent(new DeathEvent(), engine);
-            }else{
+            } else {
                 defender.getGameEventListenerManager().notifyEvent(new AttackedEvent(attacker), engine);
             }
-        }else{
+        } else {
             engine.enqueueDialogue(Dialogue.fromString(attacker.getName() + " missed"));
         }
 
         for (GameObject gameObject : currentScene.getGameObjects()) {
-                if(!(gameObject instanceof ExampleGameObject)) continue;
+            if (!(gameObject instanceof ExampleGameObject))
+                continue;
             ExampleGameObject exampleGameObject = ((ExampleGameObject) gameObject);
-            if(exampleGameObject != defender) exampleGameObject.getGameEventListenerManager().notifyEvent(new SawAttackEvent(attacker, defender), engine);
+            if (exampleGameObject != defender)
+                exampleGameObject.getGameEventListenerManager().notifyEvent(new SawAttackEvent(attacker, defender),
+                        engine);
         }
     }
 }

@@ -12,7 +12,7 @@ public class Item {
         return stats;
     }
 
-    public Item(String name, GameStats stats){
+    public Item(String name, GameStats stats) {
         this.name = name;
         this.stats = stats;
     }
