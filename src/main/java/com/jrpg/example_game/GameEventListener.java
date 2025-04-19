@@ -1,5 +1,6 @@
 package com.jrpg.example_game;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.function.BiConsumer;
 
 import com.jrpg.engine.Engine;
@@ -9,11 +10,13 @@ public class GameEventListener<T extends GameEvent> {
     private BiConsumer<T, Engine> callback;
     private Class<T> eventType;
 
-    public GameEventListener(Class<T> eventType, BiConsumer<T, Engine> callback){
-        this.eventType = eventType;
+    @SuppressWarnings("unchecked")
+    public GameEventListener(BiConsumer<T, Engine> callback){
+        this.eventType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]; 
         this.callback = callback;
     }
 
+    @SuppressWarnings("unchecked")
     public void notifyEvent(GameEvent gameEvent, Engine engine){
         if(eventType.isInstance(gameEvent)) {
             callback.accept((T) gameEvent, engine);

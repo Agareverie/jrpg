@@ -13,19 +13,19 @@ public class Goblin extends GameCharacter {
         setSpriteName("goblin");
         setDescription(Dialogue.fromString("Goblin"));
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener<SawAttackEvent>(SawAttackEvent.class, (sawAttackEvent, engine) -> {
+        getGameEventListenerManager().registerEventListener(new GameEventListener<SawAttackEvent>((sawAttackEvent, engine) -> {
             ExampleGameObject attacker = sawAttackEvent.getAttacker();
             if(!(attacker instanceof Goblin)){
                 CombatManager.initiateAttack(this, attacker, engine);
             }
         }));
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener<AttackedEvent>(AttackedEvent.class, (attackedEvent, engine) -> {
+        getGameEventListenerManager().registerEventListener(new GameEventListener<AttackedEvent>((attackedEvent, engine) -> {
             ExampleGameObject attacker = attackedEvent.getAttacker();
             CombatManager.initiateAttack(this, attacker, engine);
         }));
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>(DeathEvent.class, (gameEvent, engine) -> {
+        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>((gameEvent, engine) -> {
             engine.getCurrentScene().remove(this);
         }));
     }
