@@ -7,7 +7,7 @@ public class Teleporter extends GameObject {
         super(position, dimensions, spriteName);
     }
 
-    public void addDestination(ExampleScene exampleScene){
+    public void addDestination(ExampleScene exampleScene) {
         addGameAction(new GameAction(exampleScene.getName(), (engine) ->{
             engine.changeScenes(exampleScene);
         }));

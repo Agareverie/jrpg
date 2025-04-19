@@ -267,9 +267,10 @@ public class Camera {
         gameAnimations.removeIf(GameAnimation::isFinished);
     }
 
-    public void clearAnimations(){
+    public void clearAnimations() {
         gameAnimations.clear();
     }
+
     // main update loop
     public void update() {
         tickAnimations();

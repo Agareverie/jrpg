@@ -26,7 +26,7 @@ public class GameInputHandler {
 
     public GameInputHandler(Engine engine, JFrame frame) {
         this.engine = engine;
-        this.unhandledEventsQueue = new LinkedList<KeyEvent>();
+        this.unhandledEventsQueue = new LinkedList<>();
         frame.addKeyListener(new GameKeyListener(this));
     }
 

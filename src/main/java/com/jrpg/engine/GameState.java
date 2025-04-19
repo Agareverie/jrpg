@@ -18,7 +18,7 @@ public class GameState {
         this.inActionMenu = inActionMenu;
     }
 
-    public GameState(Engine engine){
+    public GameState(Engine engine) {
         this.engine = engine;
     }
 }

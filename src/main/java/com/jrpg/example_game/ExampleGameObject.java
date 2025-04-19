@@ -1,7 +1,7 @@
 package com.jrpg.example_game;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.jrpg.engine.components.*;
 
@@ -10,10 +10,10 @@ import com.jrpg.engine.components.*;
 
 public class ExampleGameObject extends GameObject {
     private int health;
-    private String name;
-    private GameStats baseStats;
-    private GameEventListenerManager gameEventListenerManager = new GameEventListenerManager();
-    private List<String> tags = new ArrayList<String>();
+    private final String name;
+    private final GameStats baseStats;
+    private final GameEventListenerManager gameEventListenerManager = new GameEventListenerManager();
+    private final Set<String> tags = new HashSet<>();
 
     public GameStats getBaseStats() {
         return baseStats;
@@ -35,7 +35,7 @@ public class ExampleGameObject extends GameObject {
         return gameEventListenerManager;
     }
 
-    public ExampleGameObject(String name, int health, GameStats baseStats){
+    public ExampleGameObject(String name, int health, GameStats baseStats) {
         super(Vector2D.zero(), Vector2D.zero(), null);
         this.name = name;
         this.health = health;
@@ -48,15 +48,15 @@ public class ExampleGameObject extends GameObject {
         }));
     }
 
-    public GameStats getEffectiveStats(){
+    public GameStats getEffectiveStats() {
         return baseStats;
     }
 
-    public void addTag(String tag){
+    public void addTag(String tag) {
         this.tags.add(tag);
     }
 
-    public boolean hasTag(String tag){
+    public boolean hasTag(String tag) {
         return this.tags.contains(tag);
     }
 }

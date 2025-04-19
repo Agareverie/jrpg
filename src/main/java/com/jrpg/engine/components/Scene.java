@@ -33,9 +33,9 @@ public class Scene {
     }
 
     public List<GameObject> getSelectableGameObjects(){
-        List<GameObject> selectableGameObjects = new ArrayList<GameObject>();
+        List<GameObject> selectableGameObjects = new ArrayList<>();
 
-        for(GameObject gameObject : gameObjects){
+        for(GameObject gameObject : gameObjects) {
             if(gameObject.isSelectable()) selectableGameObjects.add(gameObject);
         }
 

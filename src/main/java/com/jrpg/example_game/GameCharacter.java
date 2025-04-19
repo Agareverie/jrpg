@@ -10,7 +10,7 @@ public class GameCharacter extends ExampleGameObject {
         return items;
     }
 
-    public GameCharacter(String name, int Health, GameStats baseStats){
+    public GameCharacter(String name, int Health, GameStats baseStats) {
         super(name, Health, baseStats);
     }
 
@@ -22,8 +22,8 @@ public class GameCharacter extends ExampleGameObject {
         int accuracy = baseStats.accuracy();
         int evasion = baseStats.evasion();
 
-        for(Item item : items){
-            GameStats itemStats = item.getStats();
+        for (Item item : items) {
+            GameStats itemStats = item.stats();
             attack += itemStats.attack();    
             defense += itemStats.defense();    
             accuracy += itemStats.accuracy();    
@@ -33,7 +33,11 @@ public class GameCharacter extends ExampleGameObject {
         return new GameStats(attack, defense, accuracy, evasion);
     }
     
-    public void addItem(Item item){
+    public void addItem(Item item) {
         this.items.add(item);
+    }
+
+    public boolean isDead() {
+        return getHealth() <= 0;
     }
 }

@@ -44,7 +44,7 @@ public class Main {
             Dialogue currentDialogue = Dialogue.fromString("You have: ");
             int count = 1;
             for (Item item : player.getItems()) {
-                currentDialogue.addLine(new DialogueLine(item.getName(), Color.black, Dialogue.getDefaultFont().deriveFont(Font.BOLD)));
+                currentDialogue.addLine(new DialogueLine(item.name(), Color.black, Dialogue.getDefaultFont().deriveFont(Font.BOLD)));
                 count++;
                 if (count >= 8) {
                     engine.enqueueDialogue(currentDialogue);

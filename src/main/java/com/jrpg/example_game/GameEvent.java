@@ -5,5 +5,5 @@ package com.jrpg.example_game;
 //(comment hours after previous comment)
 //definitely make this into an enum in the actual implementation
 public interface GameEvent {
-    public String getEventName();
+    String getEventName();
 }

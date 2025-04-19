@@ -5,7 +5,7 @@ import com.jrpg.example_game.events.AttackedEvent;
 import com.jrpg.example_game.events.SawAttackEvent;
 
 public class Goblin extends GameCharacter {
-    public Goblin(Vector2D position){
+    public Goblin(Vector2D position) {
         super("Goblin", 50, new GameStats(30, 5, 60, 30));
         setPosition(position);
         setDimensions(new Vector2D(100, 200));
@@ -14,7 +14,7 @@ public class Goblin extends GameCharacter {
 
         getGameEventListenerManager().registerEventListener(new GameEventListener("SawAttack", (gameEvent, engine) -> {
             ExampleGameObject attacker = ((SawAttackEvent) gameEvent).getAttacker();
-            if(!(attacker instanceof Goblin)){
+            if (!(attacker instanceof Goblin)) {
                 CombatManager.initiateAttack(this, attacker, engine);
             }
         }));
