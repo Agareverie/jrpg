@@ -2,7 +2,8 @@ package com.jrpg.example_game.events;
 
 import com.jrpg.example_game.ExampleGameObject;
 import com.jrpg.example_game.GameEvent;
-public class SawAttackEvent implements GameEvent {
+
+public class SawAttackEvent extends GameEvent {
     private ExampleGameObject attacker;
     private ExampleGameObject defender;
 
@@ -14,12 +15,8 @@ public class SawAttackEvent implements GameEvent {
         return defender;
     }
 
-    public SawAttackEvent(ExampleGameObject attacker, ExampleGameObject defender){
+    public SawAttackEvent(ExampleGameObject attacker, ExampleGameObject defender) {
         this.attacker = attacker;
         this.defender = defender;
-    }
-    @Override
-    public String getEventName() {
-        return "SawAttack";
     }
 }

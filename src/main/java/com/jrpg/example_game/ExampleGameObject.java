@@ -3,7 +3,9 @@ package com.jrpg.example_game;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.jrpg.engine.Engine;
 import com.jrpg.engine.components.*;
+import com.jrpg.example_game.events.DeathEvent;
 
 //example of how you can extend the gameObject to fit any functionality the
 //game needs
@@ -41,11 +43,14 @@ public class ExampleGameObject extends GameObject {
         this.health = health;
         this.baseStats = baseStats;
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener("Death", (gameEvent, engine)->{
-            engine.enqueueDialogue(Dialogue.fromString(name + " died"));
-            setSelectable(false);
-            setSpriteName(null);
-        }));
+        ExampleGameObject thisExampleGameObject = this;
+        getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>() {
+            @Override
+            protected void run(DeathEvent deathEvent, Engine engine) {
+                engine.enqueueDialogue(Dialogue.fromString(name + " died"));
+                engine.getCurrentScene().remove(thisExampleGameObject);
+            }
+        });
     }
 
     public GameStats getEffectiveStats() {

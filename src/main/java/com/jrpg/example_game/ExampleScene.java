@@ -1,5 +1,6 @@
 package com.jrpg.example_game;
 
+
 import com.jrpg.engine.components.*;
 import com.jrpg.engine.*;
 
@@ -10,11 +11,12 @@ public class ExampleScene extends Scene {
         return name;
     }
 
-    public ExampleScene(String name){
+    public ExampleScene(String name) {
         super();
         this.name = name;
     }
 
+    public ExampleScene(String name, String backgroundSpriteName) {
     public ExampleScene(String name, String backgroundSpriteName) {
         this(name);
         setBackgroundImageSpriteName(backgroundSpriteName);

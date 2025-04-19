@@ -1,7 +1,9 @@
 package com.jrpg.example_game;
 
+import com.jrpg.engine.Engine;
 import com.jrpg.engine.components.*;
 import com.jrpg.example_game.events.AttackedEvent;
+import com.jrpg.example_game.events.DeathEvent;
 import com.jrpg.example_game.events.SawAttackEvent;
 
 public class Goblin extends GameCharacter {
@@ -12,20 +14,24 @@ public class Goblin extends GameCharacter {
         setSpriteName("goblin");
         setDescription(Dialogue.fromString("Goblin"));
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener("SawAttack", (gameEvent, engine) -> {
-            ExampleGameObject attacker = ((SawAttackEvent) gameEvent).getAttacker();
-            if (!(attacker instanceof Goblin)) {
-                CombatManager.initiateAttack(this, attacker, engine);
+        Goblin thisGoblin = this;
+
+        getGameEventListenerManager().registerEventListener(new GameEventListener<SawAttackEvent>() {
+            @Override
+            protected void run(SawAttackEvent sawAttackEvent, Engine engine) {
+                ExampleGameObject attacker = sawAttackEvent.getAttacker();
+                if (!(attacker instanceof Goblin)) {
+                    CombatManager.initiateAttack(thisGoblin, attacker, engine);
+                }
             }
-        }));
+        });
 
-        getGameEventListenerManager().registerEventListener(new GameEventListener("Attacked", (gameEvent, engine) -> {
-            ExampleGameObject attacker = ((AttackedEvent) gameEvent).getAttacker();
-            CombatManager.initiateAttack(this, attacker, engine);
-        }));
-
-        getGameEventListenerManager().registerEventListener(new GameEventListener("Death", (gameEvent, engine) -> {
-            engine.getCurrentScene().remove(this);
-        }));
+        getGameEventListenerManager().registerEventListener(new GameEventListener<AttackedEvent>() {
+            @Override
+            protected void run(AttackedEvent attackedEvent, Engine engine) {
+                ExampleGameObject attacker = attackedEvent.getAttacker();
+                CombatManager.initiateAttack(thisGoblin, attacker, engine);
+            }
+        });
     }
 }

@@ -1,22 +1,20 @@
 package com.jrpg.example_game;
 
-import java.util.function.BiConsumer;
+import java.lang.reflect.ParameterizedType;
 
 import com.jrpg.engine.Engine;
 
-// might move this system into the engine
-public class GameEventListener {
-    private final String eventName;
-    private final BiConsumer<GameEvent, Engine> callback;
+//might move this system into the engine
+public abstract class GameEventListener<T extends GameEvent> {
+    @SuppressWarnings("unchecked")
+    private Class<T> eventType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
-    public GameEventListener(String eventName, BiConsumer<GameEvent, Engine> callback) {
-        this.eventName = eventName;
-        this.callback = callback;
-    }
+    protected abstract void run(T gameEvent, Engine engine);
 
+    @SuppressWarnings("unchecked")
     public void notifyEvent(GameEvent gameEvent, Engine engine) {
-        if (eventName.equals(gameEvent.getEventName())) {
-            callback.accept(gameEvent, engine);
+        if (eventType.isInstance(gameEvent)) {
+            run((T) gameEvent, engine);
         }
     }
 }
