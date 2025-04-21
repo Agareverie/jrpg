@@ -8,7 +8,7 @@ public class Teleporter extends GameObject {
     }
 
     public void addDestination(ExampleScene exampleScene) {
-        addGameAction(new GameAction(exampleScene.getName(), (engine) -> {
+        addGameAction(new GameAction(exampleScene.getName(), Dialogue.fromString("Teleport to " + exampleScene.getName()), (engine) -> {
             engine.changeScenes(exampleScene);
         }));
     }

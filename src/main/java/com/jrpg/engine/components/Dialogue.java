@@ -45,7 +45,11 @@ public class Dialogue {
     }
 
     public static Dialogue fromString(String string) {
-        return fromString(string, defaultColor, defaultFont);
+        return fromString(string, defaultColor);
+    }
+
+    public static Dialogue empty() {
+        return fromString("");
     }
 
 

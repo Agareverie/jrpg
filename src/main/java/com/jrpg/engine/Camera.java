@@ -144,8 +144,9 @@ public class Camera {
         if (gameState.isInActionMenu()) {
             GameAction currentAction = engine.getCurrentSelectedGameAction();
             Dialogue description = currentAction.getDescription();
-            if (description == null)
+            if (description == null) {
                 return;
+            }
             dialogue = description;
         } else {
             GameObject currentGameObject = engine.getCurrentSelectedGameObject();

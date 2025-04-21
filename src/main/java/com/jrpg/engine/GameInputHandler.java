@@ -120,16 +120,16 @@ public class GameInputHandler {
         int keyCode = e.getKeyCode();
 
         if (keyCode == directionalKeyMaps.left()) {
-            handleDirectionalInput("left");
+            handleDirectionalInput(Direction.LEFT);
 
         } else if (keyCode == directionalKeyMaps.right()) {
-            handleDirectionalInput("right");
+            handleDirectionalInput(Direction.RIGHT);
 
         } else if (keyCode == directionalKeyMaps.up()) {
-            handleDirectionalInput("up");
+            handleDirectionalInput(Direction.UP);
 
         } else if (keyCode == directionalKeyMaps.down()) {
-            handleDirectionalInput("down");
+            handleDirectionalInput(Direction.DOWN);
 
         } else if (keyCode == acceptKeyMaps.confirm()) {
             handleConfirm();
@@ -167,19 +167,19 @@ public class GameInputHandler {
         engine.getGameState().setInActionMenu(false);
     }
 
-    private void handleDirectionalInput(String direction) {
+    private void handleDirectionalInput(Direction direction) {
         GameState gameState = engine.getGameState();
         if (gameState.isInDialogue())
             return; // don't handle movement during dialogue
         if (gameState.isInActionMenu()) {
             List<GameAction> gameActions = engine.getCurrentGameActions();
             switch (direction) {
-                case "up":
+                case UP:
                     this.selectionIndexes[1]--;
                     if (this.selectionIndexes[1] < 0)
                         this.selectionIndexes[1] = gameActions.size() - 1;
                     break;
-                case "down":
+                case DOWN:
                     this.selectionIndexes[1]++;
                     if (this.selectionIndexes[1] >= gameActions.size())
                         this.selectionIndexes[1] = 0;
@@ -191,7 +191,7 @@ public class GameInputHandler {
 
     // works by moving to the closest gameObject in the direction given
     // objects are selected from a cone
-    private void handleObjectSelectionChange(String direction) {
+    private void handleObjectSelectionChange(Direction direction) {
         List<GameObject> gameObjects = engine.getCurrentSceneSelectableGameObjects();
         if (gameObjects.isEmpty()) {
             return;
@@ -202,24 +202,24 @@ public class GameInputHandler {
         // filter out gameObjects that don't pass the condition
         Predicate<Vector2D> filterCondition;
         switch (direction) {
-            case "up":
+            case UP:
                 filterCondition = (Vector2D relativePosition) -> {
                     return relativePosition.getY() < 0 && Math.abs(relativePosition.getX()) <= -relativePosition.getY() * 1.5;
                 };
                 break;
-            case "down":
+            case DOWN:
                 filterCondition = (Vector2D relativePosition) -> {
                     return relativePosition.getY() > 0
                             && Math.abs(relativePosition.getX()) <= relativePosition.getY() * 1.5;
                 };
                 break;
-            case "left":
+            case LEFT:
                 filterCondition = (Vector2D relativePosition) -> {
                     return relativePosition.getX() < 0
                             && Math.abs(relativePosition.getY()) <= -relativePosition.getX() * 1.5;
                 };
                 break;
-            case "right":
+            case RIGHT:
                 filterCondition = (Vector2D relativePosition) -> {
                     return relativePosition.getX() > 0
                             && Math.abs(relativePosition.getY()) <= relativePosition.getX() * 1.5;
@@ -237,8 +237,9 @@ public class GameInputHandler {
                 continue;
             Vector2D relativePosition = gameObject.getPosition().sub(currentPosition);
 
-            if (!filterCondition.test(relativePosition))
+            if (!filterCondition.test(relativePosition)) {
                 continue;
+            }
             double distance = relativePosition.getLength();
             if (distance < minDistance) {
                 minIndex = i;

@@ -44,7 +44,7 @@ public class Main {
         });
 
         //dialogue system demonstration
-        GameAction inventoryAction = new GameAction("Inventory", (engine) -> {
+        GameAction inventoryAction = new GameAction("Inventory", Dialogue.empty(), (engine) -> {
 
             Dialogue currentDialogue = Dialogue.fromString("You have: ");
             int count = 1;
@@ -87,27 +87,27 @@ public class Main {
         });
 
         //buy actions
-        GameAction buySword = new GameAction("Buy Sword", (engine) -> {
+        GameAction buySword = new GameAction("Buy Sword", Dialogue.fromString("Buy a sword, increases Attack."), (engine) -> {
             player.addItem(new Item("Sword", new GameStats(30, 0, 0, 0)));
             engine.enqueueDialogue(Dialogue.fromString("You bought a sword!"));
         });
 
-        GameAction buyShield = new GameAction("Buy Shield", (engine) -> {
+        GameAction buyShield = new GameAction("Buy Shield", Dialogue.fromString("Buy a shield, increases Defense."), (engine) -> {
             player.addItem(new Item("Shield", new GameStats(0, 30, 0, 0)));
             engine.enqueueDialogue(Dialogue.fromString("You bought a shield!"));
         });
 
-        GameAction buyGlasses = new GameAction("Buy Glasses", (engine) -> {
+        GameAction buyGlasses = new GameAction("Buy Glasses", Dialogue.fromString("Buy a pair of glasses, makes you see better."), (engine) -> {
             player.addItem(new Item("Glasses", new GameStats(0, 0, 30, 0)));
             engine.enqueueDialogue(Dialogue.fromString("You bought a pair of glasses!"));
         });
 
-        GameAction buyBoots = new GameAction("Buy Boots", (engine) -> {
+        GameAction buyBoots = new GameAction("Buy Boots", Dialogue.fromString("Buy a pair of boots, made specifically for dodging."), (engine) -> {
             player.addItem(new Item("Boots", new GameStats(0, 0, 0, 30)));
             engine.enqueueDialogue(Dialogue.fromString("You bought some boots!"));
         });
 
-        GameAction talk = new GameAction("talk", (engine) -> {
+        GameAction talk = new GameAction("Talk", Dialogue.empty(), (engine) -> {
             engine.enqueueDialogue(Dialogue.fromString("""
                     Shopkeeper:
                     Welcome, adventurer, to my humble weapons shop.
@@ -168,13 +168,13 @@ public class Main {
         GameObject animationTarget = new GameObject(new Vector2D(300, 300), new Vector2D(400, 400), "testSprite1");
         ShrinkAndGrow ShrinkAndGrow = new ShrinkAndGrow(animationTarget, .25);
 
-        animationTarget.addGameAction(new GameAction("Start Animation", (engine) -> {
+        animationTarget.addGameAction(new GameAction("Start Animation", Dialogue.empty(), (engine) -> {
             engine.getCamera().addGameAnimation(ShrinkAndGrow);
             ShrinkAndGrow.setActive(true);
         }));
 
 
-        animationTarget.addGameAction(new GameAction("Stop Animation", (engine) -> {
+        animationTarget.addGameAction(new GameAction("Stop Animation", Dialogue.empty(), (engine) -> {
             ShrinkAndGrow.setActive(false);
         }));
 
@@ -183,7 +183,7 @@ public class Main {
         animationDemonstration.add(door);
 
         // example conditional action
-        GameAction attack = new GameAction("Attack",
+        GameAction attack = new GameAction("Attack", Dialogue.fromString("Attack!!!"),
                 (engine) -> {
                     CombatManager.initiateAttack(player, (ExampleGameObject) engine.getCurrentSelectedGameObject(), engine);
                 },

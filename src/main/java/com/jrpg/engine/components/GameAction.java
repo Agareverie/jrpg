@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 public class GameAction {
     private final String name;
+    private Dialogue description;
     private final Consumer<Engine> onRun;
     private final Predicate<GameObject> condition;
 
@@ -22,13 +23,18 @@ public class GameAction {
         return condition;
     }
 
-    public GameAction(String name, Consumer<Engine> onRun) {
-        this(name, onRun, (gameObject) -> true);
+    public GameAction(String name, Dialogue description, Consumer<Engine> onRun) {
+        this(name, description, onRun, (gameObject) -> true);
     }
 
-    public GameAction(String name, Consumer<Engine> onRun, Predicate<GameObject> condition) {
+    public GameAction(String name, Dialogue description, Consumer<Engine> onRun, Predicate<GameObject> condition) {
         this.name = name;
+        this.description = description;
         this.onRun = onRun;
         this.condition = condition;
+    }
+
+    public Dialogue getDescription() {
+        return description;
     }
 }
