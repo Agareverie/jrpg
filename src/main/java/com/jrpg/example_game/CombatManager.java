@@ -28,8 +28,6 @@ public class CombatManager {
 
             if (health <= 0) {
                 defender.getGameEventListenerManager().notifyEvent(new DeathEvent(), engine);
-            } else {
-                defender.getGameEventListenerManager().notifyEvent(new AttackedEvent(attacker), engine);
             }
         } else {
             engine.enqueueDialogue(Dialogue.fromString(attacker.getName() + " missed"));
@@ -37,7 +35,8 @@ public class CombatManager {
 
         //don't run saw attack event if scene has changed after the attack (from the attacked event or the death event)
         if(engine.getCurrentScene() != currentScene) return;
-
+        
+        defender.getGameEventListenerManager().notifyEvent(new AttackedEvent(attacker), engine);
         (new ArrayList<GameObject>(currentScene.getGameObjects()))
                 .stream()
                 .sequential()

@@ -155,9 +155,9 @@ public class ExampleGame {
     private static ExampleScene setUpForestScene(Teleporter teleporter) {
         ExampleScene forest = new ExampleScene("Forest", "forest_background");
 
-        forest.add(new Goblin(new Vector2D(200, 250)));
-        forest.add(new Goblin(new Vector2D(400, 250)));
-        forest.add(new Goblin(new Vector2D(600, 250)));
+        forest.add(new Goblin("Goblin 1", new Vector2D(200, 250)));
+        forest.add(new Goblin("Goblin 2", new Vector2D(400, 250)));
+        forest.add(new Goblin("Goblin 3", new Vector2D(600, 250)));
         forest.add(teleporter);
 
         forest.addMany(globalGameObjects);

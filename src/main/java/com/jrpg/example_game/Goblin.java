@@ -6,12 +6,12 @@ import com.jrpg.example_game.events.AttackedEvent;
 import com.jrpg.example_game.events.SawAttackEvent;
 
 public class Goblin extends GameCharacter {
-    public Goblin(Vector2D position) {
-        super("Goblin", 50, new GameStats(30, 5, 60, 30));
+    public Goblin(String name, Vector2D position) {
+        super(name, 50, new GameStats(30, 5, 60, 30));
         setPosition(position);
         setDimensions(new Vector2D(100, 200));
         setSpriteName("goblin");
-        setDescription(Dialogue.fromString("Goblin"));
+        setDescription(Dialogue.fromString(name));
 
         Goblin thisGoblin = this;
 
