@@ -19,7 +19,7 @@ public class Dialogue {
     public static Color getDefaultColor() {
         return defaultColor;
     }
-    
+
     public List<DialogueLine> getLines() {
         return lines;
     }
@@ -40,16 +40,16 @@ public class Dialogue {
         return dialogue;
     }
 
-    public static Dialogue fromString(String string, Color color){
+    public static Dialogue fromString(String string, Color color) {
         return fromString(string, color, defaultFont);
     }
 
-    public static Dialogue fromString(String string){
+    public static Dialogue fromString(String string) {
         return fromString(string, defaultColor, defaultFont);
     }
 
 
-    public void addLine(DialogueLine line){
+    public void addLine(DialogueLine line) {
         this.lines.add(line);
         this.length += line.getLength();
     }

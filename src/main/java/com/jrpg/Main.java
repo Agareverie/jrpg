@@ -1,22 +1,24 @@
 package com.jrpg;
 
-import java.awt.*;
-
-import javax.swing.*;
+import javax.swing.JFrame;
+import java.awt.Font;
+import java.awt.Color;
 
 import com.jrpg.engine.*;
 import com.jrpg.engine.components.*;
+import com.jrpg.engine.settings.AcceptKeyMaps;
+import com.jrpg.engine.settings.DirectionalKeyMaps;
 import com.jrpg.example_game.*;
 import com.jrpg.example_game.events.*;
 
-//for this example i put all the set up into here
-//but you can easily see how you could set this up to be more general and be in other files
-//(like the buy actions could be programmatically generated, player should probably be it's own class etc.)
+//for this example I put all the set-up into here
+//,but you can easily see how you could set this up to be more general and be in other files
+//(like the buy actions could be programmatically generated, player should probably be its own class etc.)
 public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame("JRPG");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
 
         ExampleScene weaponsShop = new ExampleScene("Shop");
         ExampleScene forest = new ExampleScene("Forest", "testBackground");
@@ -29,11 +31,11 @@ public class Main {
         player.setDimensions(new Vector2D(100, 150));
         player.setSpriteName("testSprite2");
         player.addTag("Not Attackable");
-        player.getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>(){
+        player.getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>() {
             @Override
-            protected void run(DeathEvent deathEvent, Engine engine){
+            protected void run(DeathEvent deathEvent, Engine engine) {
                 engine.enqueueDialogue(Dialogue.fromString("You Lose"));
-                //in the actual game, the engine should instead switch to a lose scene
+                //in the actual game, the engine should instead switch to a loss scene
                 engine.getCurrentScene().getGameObjects().forEach((gameObject) -> {
                     gameObject.setSelectable(false);
                     gameObject.setSpriteName(null);
@@ -58,7 +60,7 @@ public class Main {
             engine.enqueueDialogue(currentDialogue);
         });
         player.addGameAction(inventoryAction);
-        
+
         //shopkeeper
         GameCharacter shopkeeper = new GameCharacter("Shopkeeper", 50, new GameStats(20, 10, 80, 20));
         shopkeeper.setDescription(Dialogue.fromString("The shopkeeper"));
@@ -66,43 +68,52 @@ public class Main {
         shopkeeper.setPosition(new Vector2D(700, 200));
         shopkeeper.setDimensions(new Vector2D(120, 180));
 
-        shopkeeper.getGameEventListenerManager().registerEventListener(new GameEventListener<SawAttackEvent>(){
+        shopkeeper.getGameEventListenerManager().registerEventListener(new GameEventListener<SawAttackEvent>() {
             @Override
-            protected void run(SawAttackEvent sawAttackEvent, Engine engine){
-                engine.enqueueDialogue(Dialogue.fromString("Shopkeeper:\nWhy are you attacking my " + (sawAttackEvent.getDefender().getName())));
+            protected void run(SawAttackEvent sawAttackEvent, Engine engine) {
+                engine.enqueueDialogue(Dialogue.fromString("Shopkeeper:\nWhy are you attacking my " + (sawAttackEvent.getDefender().getName() + "?")));
             }
         });
 
-        shopkeeper.getGameEventListenerManager().registerEventListener(new GameEventListener<AttackedEvent>(){
+        shopkeeper.getGameEventListenerManager().registerEventListener(new GameEventListener<AttackedEvent>() {
             @Override
-            protected void run(AttackedEvent attackedEvent, Engine engine){
-            engine.enqueueDialogue(Dialogue.fromString("Shopkeeper:\nOuch!"));
+            protected void run(AttackedEvent attackedEvent, Engine engine) {
+                engine.enqueueDialogue(Dialogue.fromString("""
+                        Shopkeeper:
+                        Ouch!
+                        """)
+                );
             }
         });
 
         //buy actions
         GameAction buySword = new GameAction("Buy Sword", (engine) -> {
             player.addItem(new Item("Sword", new GameStats(30, 0, 0, 0)));
-            engine.enqueueDialogue(Dialogue.fromString("you bought a sword"));
+            engine.enqueueDialogue(Dialogue.fromString("You bought a sword!"));
         });
 
         GameAction buyShield = new GameAction("Buy Shield", (engine) -> {
             player.addItem(new Item("Shield", new GameStats(0, 30, 0, 0)));
-            engine.enqueueDialogue(Dialogue.fromString("you bought a shield"));
+            engine.enqueueDialogue(Dialogue.fromString("You bought a shield!"));
         });
 
         GameAction buyGlasses = new GameAction("Buy Glasses", (engine) -> {
             player.addItem(new Item("Glasses", new GameStats(0, 0, 30, 0)));
-            engine.enqueueDialogue(Dialogue.fromString("you bought a pair of glasses"));
+            engine.enqueueDialogue(Dialogue.fromString("You bought a pair of glasses!"));
         });
 
         GameAction buyBoots = new GameAction("Buy Boots", (engine) -> {
             player.addItem(new Item("Boots", new GameStats(0, 0, 0, 30)));
-            engine.enqueueDialogue(Dialogue.fromString("you bought some boots"));
+            engine.enqueueDialogue(Dialogue.fromString("You bought some boots!"));
         });
 
         GameAction talk = new GameAction("talk", (engine) -> {
-            engine.enqueueDialogue(Dialogue.fromString("Shopkeeper:\nwelcome adventurer to my humble weapons shop\nplease buy anything that catches your eyes"));
+            engine.enqueueDialogue(Dialogue.fromString("""
+                    Shopkeeper:
+                    Welcome, adventurer, to my humble weapons shop.
+                    Please buy anything that catches your eye.
+                    """)
+            );
         });
 
         shopkeeper.addGameAction(buySword);
@@ -151,10 +162,10 @@ public class Main {
         forest.add(door);
 
         //animation demonstration
-        //i left it pretty open so you should be able to control it however you want
-        //but it's basically just a timer that is allowed to control anything (which it's supposed to control animations)
+        //I left it pretty open so you should be able to control it however you want
+        //,but it's basically just a timer that is allowed to control anything (which it's supposed to control animations)
         //you could have it make a game object rapidly change sprites to create animations and stuff like that
-        GameObject animationTarget = new GameObject(new Vector2D(300, 300), new Vector2D(400,400), "testSprite1");
+        GameObject animationTarget = new GameObject(new Vector2D(300, 300), new Vector2D(400, 400), "testSprite1");
         ShrinkAndGrow ShrinkAndGrow = new ShrinkAndGrow(animationTarget, .25);
 
         animationTarget.addGameAction(new GameAction("Start Animation", (engine) -> {
@@ -162,7 +173,7 @@ public class Main {
             ShrinkAndGrow.setActive(true);
         }));
 
-        
+
         animationTarget.addGameAction(new GameAction("Stop Animation", (engine) -> {
             ShrinkAndGrow.setActive(false);
         }));
@@ -172,17 +183,20 @@ public class Main {
         animationDemonstration.add(door);
 
         // example conditional action
-        GameAction attack = new GameAction("Attack", (engine) -> {
-            CombatManager.initiateAttack((ExampleGameObject) player, (ExampleGameObject) engine.getCurrentSelectedGameObject(), engine);
-            }, (gameObject) -> {
-            if(!(gameObject instanceof ExampleGameObject exampleGameObject)) {
-                return false;
-            }
-            return !exampleGameObject.hasTag("Not Attackable");
-        });
-
+        GameAction attack = new GameAction("Attack",
+                (engine) -> {
+                    CombatManager.initiateAttack(player, (ExampleGameObject) engine.getCurrentSelectedGameObject(), engine);
+                },
+                (gameObject) -> {
+                    if (gameObject instanceof ExampleGameObject exampleGameObject) {
+                        return !exampleGameObject.hasTag("Not Attackable");
+                    }
+                    return false;
+                }
+        );
 
         Engine engine = new Engine(frame, weaponsShop);
+        engine.setKeyMaps(DirectionalKeyMaps.WASD, AcceptKeyMaps.ENTER_ESC);
 
         engine.addGeneralGameAction(attack);
 

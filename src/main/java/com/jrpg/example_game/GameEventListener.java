@@ -7,7 +7,7 @@ import com.jrpg.engine.Engine;
 //might move this system into the engine
 public abstract class GameEventListener<T extends GameEvent> {
     @SuppressWarnings("unchecked")
-    private Class<T> eventType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    private final Class<T> eventType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
     protected abstract void run(T gameEvent, Engine engine);
 

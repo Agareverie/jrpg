@@ -4,6 +4,8 @@ import com.jrpg.engine.components.Dialogue;
 import com.jrpg.engine.components.GameAction;
 import com.jrpg.engine.components.GameObject;
 import com.jrpg.engine.components.Scene;
+import com.jrpg.engine.settings.AcceptKeyMaps;
+import com.jrpg.engine.settings.DirectionalKeyMaps;
 
 import java.util.List;
 import java.util.Queue;
@@ -61,6 +63,18 @@ public class Engine {
 
     public GameObject getCurrentSelectedGameObject() {
         return gameInputHandler.getCurrentGameObject();
+    }
+
+    public void setKeyMaps(DirectionalKeyMaps directionalKeyMaps) {
+        gameInputHandler.setKeyMaps(directionalKeyMaps);
+    }
+
+    public void setKeyMaps(AcceptKeyMaps acceptKeyMaps) {
+        gameInputHandler.setKeyMaps(acceptKeyMaps);
+    }
+
+    public void setKeyMaps(DirectionalKeyMaps directionalKeyMaps, AcceptKeyMaps acceptKeyMaps) {
+        gameInputHandler.setKeyMaps(directionalKeyMaps, acceptKeyMaps);
     }
 
     public List<GameAction> getCurrentGameActions() {
@@ -137,9 +151,7 @@ public class Engine {
             update();
             try {
                 Thread.sleep(Math.round(1000.0f / 60.0f));
-            } catch (InterruptedException ignored) {
-            }
-            ;
+            } catch (InterruptedException ignored) {}
         }
     }
 }

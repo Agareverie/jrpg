@@ -3,7 +3,6 @@ package com.jrpg.example_game;
 import com.jrpg.engine.Engine;
 import com.jrpg.engine.components.*;
 import com.jrpg.example_game.events.AttackedEvent;
-import com.jrpg.example_game.events.DeathEvent;
 import com.jrpg.example_game.events.SawAttackEvent;
 
 public class Goblin extends GameCharacter {

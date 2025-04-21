@@ -3,6 +3,8 @@ package com.jrpg.engine;
 import com.jrpg.engine.components.GameAction;
 import com.jrpg.engine.components.GameObject;
 import com.jrpg.engine.components.Vector2D;
+import com.jrpg.engine.settings.AcceptKeyMaps;
+import com.jrpg.engine.settings.DirectionalKeyMaps;
 
 import java.awt.event.*;
 import java.util.List;
@@ -15,6 +17,8 @@ import javax.swing.JFrame;
 public class GameInputHandler {
     private final Engine engine;
     private final Queue<KeyEvent> unhandledEventsQueue;
+    private DirectionalKeyMaps directionalKeyMaps = DirectionalKeyMaps.ARROW_KEYS;
+    private AcceptKeyMaps acceptKeyMaps = AcceptKeyMaps.ZX;
 
     // first one is objects in current scene
     // second one is actions in menus
@@ -28,6 +32,19 @@ public class GameInputHandler {
         this.engine = engine;
         this.unhandledEventsQueue = new LinkedList<>();
         frame.addKeyListener(new GameKeyListener(this));
+    }
+
+    public void setKeyMaps(DirectionalKeyMaps directionalKeyMaps) {
+        this.directionalKeyMaps = directionalKeyMaps;
+    }
+
+    public void setKeyMaps(AcceptKeyMaps acceptKeyMaps) {
+        this.acceptKeyMaps = acceptKeyMaps;
+    }
+
+    public void setKeyMaps(DirectionalKeyMaps directionalKeyMaps, AcceptKeyMaps acceptKeyMaps) {
+        this.directionalKeyMaps = directionalKeyMaps;
+        this.acceptKeyMaps = acceptKeyMaps;
     }
 
     /**
@@ -100,24 +117,25 @@ public class GameInputHandler {
     }
 
     private void handleInput(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_LEFT:
-                handleDirectionalInput("left");
-                break;
-            case KeyEvent.VK_RIGHT:
-                handleDirectionalInput("right");
-                break;
-            case KeyEvent.VK_UP:
-                handleDirectionalInput("up");
-                break;
-            case KeyEvent.VK_DOWN:
-                handleDirectionalInput("down");
-                break;
-            case KeyEvent.VK_Z:
-                handleConfirm();
-                break;
-            case KeyEvent.VK_X:
-                handleCancel();
+        int keyCode = e.getKeyCode();
+
+        if (keyCode == directionalKeyMaps.left()) {
+            handleDirectionalInput("left");
+
+        } else if (keyCode == directionalKeyMaps.right()) {
+            handleDirectionalInput("right");
+
+        } else if (keyCode == directionalKeyMaps.up()) {
+            handleDirectionalInput("up");
+
+        } else if (keyCode == directionalKeyMaps.down()) {
+            handleDirectionalInput("down");
+
+        } else if (keyCode == acceptKeyMaps.confirm()) {
+            handleConfirm();
+
+        } else if (keyCode == acceptKeyMaps.cancel()) {
+            handleCancel();
         }
     }
 
@@ -186,8 +204,7 @@ public class GameInputHandler {
         switch (direction) {
             case "up":
                 filterCondition = (Vector2D relativePosition) -> {
-                    return relativePosition.getY() < 0
-                            && Math.abs(relativePosition.getX()) <= -relativePosition.getY() * 1.5;
+                    return relativePosition.getY() < 0 && Math.abs(relativePosition.getX()) <= -relativePosition.getY() * 1.5;
                 };
                 break;
             case "down":
