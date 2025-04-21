@@ -124,7 +124,7 @@ public class ExampleGame {
 
         ExampleGameObject weaponRack = new ExampleGameObject("Weapons Rack", 50, new GameStats(0, 60, 0, -40));
         weaponRack.setDescription(Dialogue.fromString("Weapons Rack"));
-        weaponRack.setSpriteName("weaponRack");
+        weaponRack.setSpriteName("weapon_rack");
         weaponRack.setPosition(new Vector2D(400, 350));
         weaponRack.setDimensions(new Vector2D(400, 400));
 
@@ -153,7 +153,7 @@ public class ExampleGame {
     }
 
     private static ExampleScene setUpForestScene(Teleporter teleporter) {
-        ExampleScene forest = new ExampleScene("Forest", "testBackground");
+        ExampleScene forest = new ExampleScene("Forest", "forest_background");
 
         forest.add(new Goblin(new Vector2D(200, 250)));
         forest.add(new Goblin(new Vector2D(400, 250)));
@@ -172,7 +172,7 @@ public class ExampleGame {
         // it's supposed to control animations)
         // you could have it make a game object rapidly change sprites to create
         // animations and stuff like that
-        GameObject animationTarget = new GameObject(new Vector2D(300, 300), new Vector2D(400, 400), "testSprite1");
+        GameObject animationTarget = new GameObject(new Vector2D(300, 300), new Vector2D(400, 400), "shiroko");
         animationTarget.setDescription(Dialogue.fromString("Animation Demo"));
         ShrinkAndGrow ShrinkAndGrow = new ShrinkAndGrow(animationTarget, .25);
 
@@ -196,7 +196,7 @@ public class ExampleGame {
 
     private static ExampleScene setUpDefeatScene() {
         ExampleScene defeatScene = new ExampleScene("Defeat");
-        defeatScene.setBackgroundImageSpriteName("deathBackground");
+        defeatScene.setBackgroundImageSpriteName("death_background");
         GameObject restartButton = new GameObject(new Vector2D(Dimensions.WIDTH/2, 225), Vector2D.zero(), null);
         restartButton.addGameAction(new GameAction("Restart", Dialogue.fromString("Restart"), (engine) -> {restart();}));
         
@@ -226,7 +226,7 @@ public class ExampleGame {
         player = new Player(100, new GameStats(20, 10, 80, 20));
         player.setPosition(new Vector2D(1100, 400));
         player.setDimensions(new Vector2D(100, 150));
-        player.setSpriteName("testSprite2");
+        player.setSpriteName("player");
         player.addTag("Not Attackable");
         player.getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>() {
             @Override
@@ -259,7 +259,7 @@ public class ExampleGame {
     private static void setUpGlobalGameObjects(){
         globalGameObjects.add(player);
         //settings button
-        GameObject settingsButton = new GameObject(new Vector2D(25, 25), new Vector2D(50, 50), "settingsIcon");
+        GameObject settingsButton = new GameObject(new Vector2D(25, 25), new Vector2D(50, 50), "settings_icon");
         globalGameObjects.add(settingsButton);
 
         GameAction changeDirectionalControls = new GameAction(engine.getCurrentDirectionalKeyMaps().name(), Dialogue.fromString("Change directional controls"), (engine, action)->{
@@ -281,7 +281,7 @@ public class ExampleGame {
 
         changeDirectionalControls.setClosesMenu(false);
 
-        GameAction changeAcceptControls = new GameAction(engine.getCurrentAcceptKeyMaps().name(), Dialogue.fromString("Change confrim/cancel controls"), (engine, action)->{
+        GameAction changeAcceptControls = new GameAction(engine.getCurrentAcceptKeyMaps().name(), Dialogue.fromString("Change confirm/cancel controls"), (engine, action)->{
             String currentAcceptKeyMapsName = engine.getCurrentAcceptKeyMaps().name();
             
             if(currentAcceptKeyMapsName == AcceptKeyMaps.ZX.name()){
