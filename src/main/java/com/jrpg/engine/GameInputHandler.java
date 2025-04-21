@@ -263,6 +263,10 @@ public class GameInputHandler {
         selectionIndexes[0] = minIndex;
     }
 
+    public void reset(){
+        this.unhandledEventsQueue.clear();
+    }
+
     public void update() {
         while (unhandledEventsQueue.peek() != null) {
             handleInput(unhandledEventsQueue.poll());

@@ -13,7 +13,9 @@ import com.jrpg.engine.components.GameAction;
 import com.jrpg.engine.components.GameObject;
 import com.jrpg.engine.components.Scene;
 import com.jrpg.engine.components.Vector2D;
+import com.jrpg.engine.settings.Dimensions;
 import com.jrpg.engine.settings.AcceptKeyMaps;
+import com.jrpg.engine.settings.DialogueBoxSettings;
 import com.jrpg.engine.settings.DirectionalKeyMaps;
 import com.jrpg.example_game.events.AttackedEvent;
 import com.jrpg.example_game.events.DeathEvent;
@@ -75,24 +77,29 @@ public class ExampleGame {
                     player.addItem(new Item("Sword", new GameStats(30, 0, 0, 0)));
                     engine.enqueueDialogue(Dialogue.fromString("You bought a sword!"));
                 });
+        buySword.setClosesMenu(false);
 
         GameAction buyShield = new GameAction("Buy Shield", Dialogue.fromString("Buy a shield, increases Defense."),
                 (engine) -> {
                     player.addItem(new Item("Shield", new GameStats(0, 30, 0, 0)));
                     engine.enqueueDialogue(Dialogue.fromString("You bought a shield!"));
                 });
+        buyShield.setClosesMenu(false);
 
         GameAction buyGlasses = new GameAction("Buy Glasses",
                 Dialogue.fromString("Buy a pair of glasses, makes you see better."), (engine) -> {
                     player.addItem(new Item("Glasses", new GameStats(0, 0, 30, 0)));
                     engine.enqueueDialogue(Dialogue.fromString("You bought a pair of glasses!"));
                 });
+        buyGlasses.setClosesMenu(false);
 
         GameAction buyBoots = new GameAction("Buy Boots",
                 Dialogue.fromString("Buy a pair of boots, made specifically for dodging."), (engine) -> {
                     player.addItem(new Item("Boots", new GameStats(0, 0, 0, 30)));
                     engine.enqueueDialogue(Dialogue.fromString("You bought some boots!"));
                 });
+        buyBoots.setClosesMenu(false);
+
 
         GameAction talk = new GameAction("Talk", Dialogue.empty(), (engine) -> {
             engine.enqueueDialogue(Dialogue.fromString("""
@@ -187,8 +194,14 @@ public class ExampleGame {
 
     }
 
-    private static ExampleScene setUpLoseScene() {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private static ExampleScene setUpDefeatScene() {
+        ExampleScene defeatScene = new ExampleScene("Defeat");
+        defeatScene.setBackgroundImageSpriteName("deathBackground");
+        GameObject restartButton = new GameObject(new Vector2D(Dimensions.WIDTH/2, 225), Vector2D.zero(), null);
+        restartButton.addGameAction(new GameAction("Restart", Dialogue.fromString("Restart"), (engine) -> {restart();}));
+        
+        defeatScene.add(restartButton);
+        return defeatScene;
     }
 
     private static void setUpConditionalActions() {
@@ -218,11 +231,10 @@ public class ExampleGame {
         player.getGameEventListenerManager().registerEventListener(new GameEventListener<DeathEvent>() {
             @Override
             protected void run(DeathEvent deathEvent, Engine engine) {
+                engine.reset(setUpDefeatScene());
                 engine.enqueueDialogue(Dialogue.fromString("You Lose"));
-                engine.changeScenes(setUpLoseScene());
             }
         });
-
         
         // dialogue system demonstration
         GameAction inventoryAction = new GameAction("Inventory", Dialogue.empty(), (engine) -> {
@@ -284,7 +296,10 @@ public class ExampleGame {
         });
         changeAcceptControls.setClosesMenu(false);
 
+        GameAction restart = new GameAction("Restart", Dialogue.fromString("Restart"), (engine) -> {restart();});
+
         settingsButton.addGameAction(changeDirectionalControls);
         settingsButton.addGameAction(changeAcceptControls);
+        settingsButton.addGameAction(restart);
     }
 }

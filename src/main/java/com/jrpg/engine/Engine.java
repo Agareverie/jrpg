@@ -140,6 +140,7 @@ public class Engine {
     public void reset(Scene initialScene) {
         dialogueQueue.clear();
         generalGameActions.clear();
+        gameInputHandler.reset();
         changeScenes(initialScene);
     }
 

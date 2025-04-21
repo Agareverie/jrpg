@@ -1,5 +1,7 @@
 package com.jrpg.example_game;
 
+import java.util.ArrayList;
+
 import com.jrpg.engine.Engine;
 import com.jrpg.engine.components.*;
 import com.jrpg.example_game.events.AttackedEvent;
@@ -33,7 +35,10 @@ public class CombatManager {
             engine.enqueueDialogue(Dialogue.fromString(attacker.getName() + " missed"));
         }
 
-        currentScene.getGameObjects()
+        //don't run saw attack event if scene has changed after the attack (from the attacked event or the death event)
+        if(engine.getCurrentScene() != currentScene) return;
+
+        (new ArrayList<GameObject>(currentScene.getGameObjects()))
                 .stream()
                 .sequential()
                 .filter(gameObject -> gameObject instanceof ExampleGameObject)
@@ -43,5 +48,6 @@ public class CombatManager {
                     gameObject.getGameEventListenerManager().notifyEvent(new SawAttackEvent(attacker, defender),
                             engine);
                 });
+        
     }
 }
