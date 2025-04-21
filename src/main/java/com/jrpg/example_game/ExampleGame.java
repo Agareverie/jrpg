@@ -13,6 +13,8 @@ import com.jrpg.engine.components.GameAction;
 import com.jrpg.engine.components.GameObject;
 import com.jrpg.engine.components.Scene;
 import com.jrpg.engine.components.Vector2D;
+import com.jrpg.engine.settings.AcceptKeyMaps;
+import com.jrpg.engine.settings.DirectionalKeyMaps;
 import com.jrpg.example_game.events.AttackedEvent;
 import com.jrpg.example_game.events.DeathEvent;
 import com.jrpg.example_game.events.SawAttackEvent;
@@ -244,5 +246,45 @@ public class ExampleGame {
 
     private static void setUpGlobalGameObjects(){
         globalGameObjects.add(player);
+        //settings button
+        GameObject settingsButton = new GameObject(new Vector2D(25, 25), new Vector2D(50, 50), "settingsIcon");
+        globalGameObjects.add(settingsButton);
+
+        GameAction changeDirectionalControls = new GameAction(engine.getCurrentDirectionalKeyMaps().name(), Dialogue.fromString("Change directional controls"), (engine, action)->{
+            String currentDirectionalKeyMapsName = engine.getCurrentDirectionalKeyMaps().name();
+            
+            if(currentDirectionalKeyMapsName == DirectionalKeyMaps.ARROW_KEYS.name()){
+                engine.setKeyMaps(DirectionalKeyMaps.WASD);
+            }
+            else if(currentDirectionalKeyMapsName == DirectionalKeyMaps.WASD.name()){
+                engine.setKeyMaps(DirectionalKeyMaps.HJKL);
+            }
+            else if(currentDirectionalKeyMapsName == DirectionalKeyMaps.HJKL.name()){
+                engine.setKeyMaps(DirectionalKeyMaps.ARROW_KEYS);
+            }
+
+            action.setName(engine.getCurrentDirectionalKeyMaps().name());
+            
+        });
+
+        changeDirectionalControls.setClosesMenu(false);
+
+        GameAction changeAcceptControls = new GameAction(engine.getCurrentAcceptKeyMaps().name(), Dialogue.fromString("Change confrim/cancel controls"), (engine, action)->{
+            String currentAcceptKeyMapsName = engine.getCurrentAcceptKeyMaps().name();
+            
+            if(currentAcceptKeyMapsName == AcceptKeyMaps.ZX.name()){
+                engine.setKeyMaps(AcceptKeyMaps.ENTER_ESC);
+            }
+            else if(currentAcceptKeyMapsName == AcceptKeyMaps.ENTER_ESC.name()){
+                engine.setKeyMaps(AcceptKeyMaps.ZX);
+            }
+
+            action.setName(engine.getCurrentAcceptKeyMaps().name());
+            
+        });
+        changeAcceptControls.setClosesMenu(false);
+
+        settingsButton.addGameAction(changeDirectionalControls);
+        settingsButton.addGameAction(changeAcceptControls);
     }
 }

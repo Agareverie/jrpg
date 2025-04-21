@@ -7,6 +7,7 @@ public interface DirectionalKeyMaps {
     int down();
     int left();
     int right();
+    String name();
 
     DirectionalKeyMaps WASD = new DirectionalKeyMaps() {
         @Override
@@ -27,6 +28,11 @@ public interface DirectionalKeyMaps {
         @Override
         public int right() {
             return KeyEvent.VK_D;
+        }
+
+        @Override
+        public String name(){
+            return "WASD";
         }
     };
 
@@ -50,6 +56,11 @@ public interface DirectionalKeyMaps {
         public int right() {
             return KeyEvent.VK_RIGHT;
         }
+
+        @Override
+        public String name(){
+            return "Arrow Keys";
+        }
     };
 
     DirectionalKeyMaps HJKL = new DirectionalKeyMaps() {
@@ -71,6 +82,11 @@ public interface DirectionalKeyMaps {
         @Override
         public int right() {
             return KeyEvent.VK_L;
+        }
+
+        @Override
+        public String name(){
+            return "HJKL";
         }
     };
 }

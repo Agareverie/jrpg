@@ -75,6 +75,14 @@ public class Engine {
         gameInputHandler.setKeyMaps(directionalKeyMaps, acceptKeyMaps);
     }
 
+    public DirectionalKeyMaps getCurrentDirectionalKeyMaps(){
+        return gameInputHandler.getDirectionalKeyMaps();
+    }
+
+    public AcceptKeyMaps getCurrentAcceptKeyMaps(){
+        return gameInputHandler.getAcceptKeyMaps();
+    }
+
     public List<GameAction> getCurrentGameActions() {
         GameObject currentGameObject = getCurrentSelectedGameObject();
         List<GameAction> gameActions = new ArrayList<GameAction>();

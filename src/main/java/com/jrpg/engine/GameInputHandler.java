@@ -28,6 +28,14 @@ public class GameInputHandler {
         return unhandledEventsQueue;
     }
 
+    public DirectionalKeyMaps getDirectionalKeyMaps() {
+        return directionalKeyMaps;
+    }
+
+    public AcceptKeyMaps getAcceptKeyMaps() {
+        return acceptKeyMaps;
+    }
+
     public GameInputHandler(Engine engine, JFrame frame) {
         this.engine = engine;
         this.unhandledEventsQueue = new LinkedList<>();
@@ -151,8 +159,9 @@ public class GameInputHandler {
             if (gameActions.isEmpty()) {
                 return;
             }
-            gameActions.get(selectionIndexes[1]).getOnRun().accept(engine);
-            gameState.setInActionMenu(false);
+            GameAction gameAction = gameActions.get(selectionIndexes[1]);
+            gameAction.getOnRun().accept(engine);
+            if(gameAction.closesMenu()) gameState.setInActionMenu(false);
             return;
         }
 
