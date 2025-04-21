@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 public class GameAction {
     private String name;
     private Dialogue description;
-    private final BiConsumer<Engine, GameAction> onRun;
+    private final Consumer<Engine> onRun;
     private final Predicate<GameObject> condition;
     private boolean closesMenu = true;
 
@@ -38,26 +38,29 @@ public class GameAction {
     }
 
     public Consumer<Engine> getOnRun() {
-        return (engine) -> {onRun.accept(engine, this);};
+        return onRun;
     }
 
     public Predicate<GameObject> getCondition() {
         return condition;
     }
-
-    public GameAction(String name, Dialogue description, Consumer<Engine> onRun) {
-        this(name, description, (engine, action) -> {onRun.accept(engine);}, (gameObject) -> true);
-    }
-
-    public GameAction(String name, Dialogue description, Consumer<Engine> onRun, Predicate<GameObject> condition) {
-        this(name, description, (engine, action) -> {onRun.accept(engine);}, condition);
-    }
-
+    
     public GameAction(String name, Dialogue description, BiConsumer<Engine, GameAction> onRun) {
         this(name, description, onRun, (gameObject) -> true);
     }
 
     public GameAction(String name, Dialogue description, BiConsumer<Engine, GameAction> onRun, Predicate<GameObject> condition) {
+        this.name = name;
+        this.description = description;
+        this.onRun = (engine) -> {onRun.accept(engine, this);};
+        this.condition = condition;
+    }
+
+    public GameAction(String name, Dialogue description, Consumer<Engine> onRun) {
+        this(name, description, onRun, (gameObject) -> true);
+    }
+
+    public GameAction(String name, Dialogue description, Consumer<Engine> onRun, Predicate<GameObject> condition) {
         this.name = name;
         this.description = description;
         this.onRun = onRun;
