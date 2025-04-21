@@ -2,6 +2,8 @@ package com.jrpg.example_game;
 
 import javax.swing.JFrame;
 import java.awt.Font;
+import java.util.List;
+import java.util.ArrayList;
 import java.awt.Color;
 
 import com.jrpg.engine.Engine;
@@ -9,6 +11,7 @@ import com.jrpg.engine.components.Dialogue;
 import com.jrpg.engine.components.DialogueLine;
 import com.jrpg.engine.components.GameAction;
 import com.jrpg.engine.components.GameObject;
+import com.jrpg.engine.components.Scene;
 import com.jrpg.engine.components.Vector2D;
 import com.jrpg.example_game.events.AttackedEvent;
 import com.jrpg.example_game.events.DeathEvent;
@@ -17,17 +20,21 @@ import com.jrpg.example_game.events.SawAttackEvent;
 public class ExampleGame {
     private static Engine engine;
     private static Player player;
+    private static List<GameObject> globalGameObjects = new ArrayList<GameObject>();
 
     public static void initialize(JFrame frame) {
         if (engine != null)
             return;
-        engine = new Engine(frame, setUpStarterScene());
+        engine = new Engine(frame, new Scene());
         restart();
         engine.loop();
     }
 
     public static void restart() {
+        globalGameObjects.clear();
+
         setUpPlayer();
+        setUpGlobalGameObjects();
         engine.reset(setUpStarterScene());
         setUpConditionalActions();
     }
@@ -125,12 +132,13 @@ public class ExampleGame {
         door.addDestination(setUpForestScene(door));
         door.addDestination(setUpDemoScene(door));
 
-        weaponsShop.add(player);
         weaponsShop.add(shopkeeper);
         weaponsShop.add(shelves);
         weaponsShop.add(weaponRack);
         weaponsShop.add(box);
         weaponsShop.add(door);
+
+        weaponsShop.addMany(globalGameObjects);
 
         return weaponsShop;
     }
@@ -138,12 +146,12 @@ public class ExampleGame {
     private static ExampleScene setUpForestScene(Teleporter teleporter) {
         ExampleScene forest = new ExampleScene("Forest", "testBackground");
 
-        forest.add(player);
         forest.add(new Goblin(new Vector2D(200, 250)));
         forest.add(new Goblin(new Vector2D(400, 250)));
         forest.add(new Goblin(new Vector2D(600, 250)));
         forest.add(teleporter);
 
+        forest.addMany(globalGameObjects);
         return forest;
     }
 
@@ -168,9 +176,10 @@ public class ExampleGame {
             ShrinkAndGrow.setActive(false);
         }));
 
-        demoScene.add(player);
         demoScene.add(animationTarget);
         demoScene.add(teleporter);
+
+        demoScene.addMany(globalGameObjects);
 
         return demoScene;
 
@@ -231,5 +240,9 @@ public class ExampleGame {
             engine.enqueueDialogue(currentDialogue);
         });
         player.addGameAction(inventoryAction);
+    }
+
+    private static void setUpGlobalGameObjects(){
+        globalGameObjects.add(player);
     }
 }

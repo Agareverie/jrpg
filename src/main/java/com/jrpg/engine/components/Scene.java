@@ -23,6 +23,12 @@ public class Scene {
         this.gameObjects.add(gameObject);
     }
 
+    public void addMany(Iterable<GameObject> gameObjects){
+        for(GameObject gameObject : gameObjects){
+            add(gameObject);
+        }
+    }
+
 
     public void remove(GameObject gameObject) {
         if (!this.gameObjects.contains(gameObject)) {
