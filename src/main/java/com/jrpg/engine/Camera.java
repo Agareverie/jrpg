@@ -209,14 +209,17 @@ public class Camera {
     private void addActionsMenu() {
         GameInputHandler gameInputHandler = engine.getGameInputHandler();
         GameObject currentGameObject = gameInputHandler.getCurrentGameObject();
-        Vector2D actionsBoxPosition = currentGameObject == null
-                ? new Vector2D(dimensions.getWidth() / 2, dimensions.getHeight() / 2)
-                : currentGameObject.getPosition();
-
+        
         // render menu box
+        Vector2D actionsBoxPosition;
         float heightValue = (ActionsMenuSettings.FONT.getSize() + ActionsMenuSettings.PADDING_Y) * ActionsMenuSettings.MAX_ACTIONS_PER_PAGE + 2 * ActionsMenuSettings.PADDING_Y;
         Vector2D actionsBoxDimensions = new Vector2D(ActionsMenuSettings.WIDTH, heightValue);
 
+        if(currentGameObject.getPosition().getX() + ActionsMenuSettings.WIDTH > Dimensions.WIDTH){
+            actionsBoxPosition = currentGameObject.getPosition().sub(ActionsMenuSettings.WIDTH,0);
+        }else{
+            actionsBoxPosition = currentGameObject.getPosition();
+        }
         renderer.add(new Rectangle(
                 actionsBoxPosition.toCoordinate(),
                 actionsBoxDimensions.toCoordinate(),
