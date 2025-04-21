@@ -64,4 +64,10 @@ public class GameObject {
     public void addGameAction(GameAction gameAction) {
         this.gameActions.add(gameAction);
     }
+
+    public void addGameActions(Iterable<GameAction> gameActions){
+        for(GameAction gameAction : gameActions){
+            addGameAction(gameAction);
+        }
+    }
 }

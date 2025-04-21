@@ -64,4 +64,14 @@ public class ExampleGameObject extends GameObject {
     public boolean hasTag(String tag) {
         return this.tags.contains(tag);
     }
+
+    public void registerEventListener(GameEventListener<?> gameEventListener){
+        gameEventListenerManager.registerEventListener(gameEventListener);
+    }
+
+    public void registerEventListeners(Iterable<GameEventListener<?>> gameEventListeners){
+        for(GameEventListener<?> gameEventListener : gameEventListeners){
+            registerEventListener(gameEventListener);
+        }
+    }
 }

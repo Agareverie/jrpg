@@ -21,7 +21,6 @@ public class Engine {
 
     private final Camera camera;
     private final GameInputHandler gameInputHandler;
-    private final List<Scene> scenes = new ArrayList<>();
     private final List<GameAction> generalGameActions = new ArrayList<>();
     private final Queue<Dialogue> dialogueQueue = new LinkedList<>();
     private final GameState gameState = new GameState(this);
@@ -47,10 +46,9 @@ public class Engine {
     }
 
     public Engine(JFrame frame, Scene initialScene) {
-        this.currentScene = initialScene;
-
         camera = new Camera(this, frame);
         gameInputHandler = new GameInputHandler(this, frame);
+        changeScenes(initialScene);
     }
 
     public List<GameObject> getCurrentSceneGameObjects() {
@@ -83,14 +81,11 @@ public class Engine {
         if (currentGameObject == null)
             return gameActions;
 
-        // Add gameObject's actions
-        Stream.concat(
-                currentGameObject.getGameActions().stream(),
-                generalGameActions.stream()).forEach(gameAction -> {
-                    if (gameAction.getCondition().test(currentGameObject)) {
-                        gameActions.add(gameAction);
-                    }   
-                });
+        Stream.concat(generalGameActions.stream(), currentGameObject.getGameActions().stream()).forEach(gameAction -> {
+            if (gameAction.getCondition().test(currentGameObject)) {
+                gameActions.add(gameAction);
+            }
+        });
 
         return gameActions;
     }
@@ -124,21 +119,20 @@ public class Engine {
         }
     }
 
-    public void addScene(Scene scene) {
-        if (scenes.contains(scene)) {
-            throw new RuntimeException("Scene already added.");
-        }
-
-        scenes.add(scene);
-    }
-
     public void changeScenes(Scene scene) {
-        if (!scenes.contains(scene)) {
-            addScene(scene);
-        }
-
         currentScene = scene;
         camera.clearAnimations();
+    }
+
+    /**
+     * resets the engine
+     * and sets the currentScene to the given scene
+     * @param scene
+     */
+    public void reset(Scene initialScene) {
+        dialogueQueue.clear();
+        generalGameActions.clear();
+        changeScenes(initialScene);
     }
 
     public void update() {
@@ -151,7 +145,8 @@ public class Engine {
             update();
             try {
                 Thread.sleep(Math.round(1000.0f / 60.0f));
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException ignored) {
+            }
         }
     }
 }
