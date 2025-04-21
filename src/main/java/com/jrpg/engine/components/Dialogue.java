@@ -52,7 +52,6 @@ public class Dialogue {
         return fromString("");
     }
 
-
     public void addLine(DialogueLine line) {
         this.lines.add(line);
         this.length += line.getLength();

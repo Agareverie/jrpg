@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Scene {
-    private final List<GameObject> gameObjects = new ArrayList<GameObject>();
+    private final List<GameObject> gameObjects = new ArrayList<>();
     private String backgroundImageSpriteName;
 
     public List<GameObject> getGameObjects() {

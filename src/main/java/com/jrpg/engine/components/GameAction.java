@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 public class GameAction {
     private final String name;
-    private Dialogue description;
+    private final Dialogue description;
     private final Consumer<Engine> onRun;
     private final Predicate<GameObject> condition;
 
