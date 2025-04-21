@@ -51,7 +51,7 @@ public class ExampleGame {
         shopkeeper.setDescription(Dialogue.fromString("The shopkeeper"));
         shopkeeper.setSpriteName("human");
         shopkeeper.setPosition(new Vector2D(700, 200));
-        shopkeeper.setDimensions(new Vector2D(120, 180));
+        shopkeeper.setDimensions(new Vector2D(120, 240));
 
         shopkeeper.getGameEventListenerManager().registerEventListener(new GameEventListener<SawAttackEvent>() {
             @Override
