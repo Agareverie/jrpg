@@ -4,24 +4,32 @@ import java.awt.*;
 
 import com.jrpg.rendering.Coordinate;
 
-public class Text implements GraphicsObject{
-    private String text;
-    private Font font;
-    private Coordinate position;
+public record Text(String text, Coordinate position, Color color, Font font) implements Drawable {
 
-    public Text(String text, Coordinate position, Font font, int fontSize){
-        this.text = text;
-        this.position = position;
-        this.font = font.deriveFont((float) fontSize);
+    public Text(String text, Coordinate position, Color color, Font font, float fontSize) {
+        this(text, position, color, font.deriveFont(fontSize));
     }
-    public Text(String text, Coordinate position, Font font){
-        this.text = text;
-        this.position = position;
-        this.font = font;
+
+    @SuppressWarnings("MagicConstant")
+    public Text(String text, Coordinate position, Color color, Font font, int style) {
+        this(text, position, color, font.deriveFont(style));
+    }
+
+    @SuppressWarnings("MagicConstant")
+    public Text(String text, Coordinate position, Color color, Font font, float fontSize, int style) {
+        this(text, position, color, font.deriveFont(style, fontSize));
+    }
+
+    private int validateStyle(int style) {
+        if (style > 3) {
+            return Font.PLAIN;
+        }
+        return style;
     }
 
     @Override
     public void draw(Graphics g) {
+        g.setColor(color);
         g.setFont(font);
         g.drawString(text, position.getX(), position.getY());
     }
